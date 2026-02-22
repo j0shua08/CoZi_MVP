@@ -1,0 +1,9 @@
+body { font-family: system-ui, -apple-system, Arial; margin: 0; background: #f6f6f6; }
+.container { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+.card { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,.08); display: grid; gap: 12px; }
+label { display: grid; gap: 6px; font-size: 14px; }
+input, textarea { padding: 10px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; }
+button { padding: 12px; border: 0; border-radius: 10px; cursor: pointer; font-weight: 600; }
+.status { margin: 0; font-size: 14px; }
+.status.success { color: #0a7a2f; }
+.status.error { color: #b00020; }

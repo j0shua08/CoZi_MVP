@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi Admin - Add Listing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>CoZi Superadmin</h1>
+    <p>Add a new listing (manual input).</p>
+
+    <form id="listingForm" class="card">
+      <label>
+        Listing Image (upload)
+        <input type="file" id="imageFile" accept="image/*" />
+      </label>
+      
+      <input type="hidden" id="imageUrl" name="imageUrl" />
+
+      <label>
+        Title
+        <input type="text" name="title" required />
+      </label>
+
+      <label>
+        Description
+        <textarea name="description" rows="4" required></textarea>
+      </label>
+
+      <label>
+        Location
+        <input type="text" name="location" required />
+      </label>
+
+      <label>
+        Amenities (text)
+        <input type="text" name="amenities" placeholder="WiFi, Aircon, Desk" required />
+      </label>
+
+      <label>
+        Price (PHP/month)
+        <input type="number" name="price" min="0" required />
+      </label>
+
+      <label>
+        Contact Number
+        <input type="text" name="contactNumber" required />
+      </label>
+
+      <button type="submit">Add Listing</button>
+      <p id="status" class="status"></p>
+    </form>
+
+    <section class="card">
+      <h2>Manage Listings</h2>
+      <div id="adminListings"></div>
+    </section>
+
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>
+
+

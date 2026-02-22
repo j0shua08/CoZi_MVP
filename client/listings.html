@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi | Listings</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+      <div>
+        <h1 style="margin:0;">CoZi Listings</h1>
+        <p style="margin:6px 0 0;">Search and view available condos.</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <label>
+        Search (title/location)
+        <input id="searchInput" type="text" placeholder="e.g., Katipunan" />
+      </label>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <label>
+          Min Price
+          <input id="minPrice" type="number" min="0" placeholder="0" />
+        </label>
+
+        <label>
+          Max Price
+          <input id="maxPrice" type="number" min="0" placeholder="30000" />
+        </label>
+      </div>
+
+      <div style="display:flex; gap:10px;">
+        <button id="searchBtn" type="button">Search</button>
+        <button id="clearBtn" type="button">Clear</button>
+      </div>
+
+      <p id="listingsStatus" class="status"></p>
+    </section>
+
+    <section id="listingsGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:12px;"></section>
+  </main>
+
+  <script src="listings.js"></script>
+</body>
+</html>
