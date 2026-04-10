@@ -4,25 +4,8 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
 const IMAGE_LABELS = ["bedroom", "bathroom", "kitchen", "living room", "cover photo"];
 const IMAGE_PLACEHOLDER = "https://placehold.co/900x680/f5ecdf/6d5a4a?text=CoZi";
 
-const grid = document.getElementById("listingsGrid");
-const statusEl = document.getElementById("listingsStatus");
-const searchForm = document.getElementById("searchForm");
-
-const searchInput = document.getElementById("searchInput");
-const minPriceInput = document.getElementById("minPrice");
-const maxPriceInput = document.getElementById("maxPrice");
-
-searchForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  loadListings();
-});
-
-document.getElementById("clearBtn").addEventListener("click", () => {
-  searchInput.value = "";
-  minPriceInput.value = "";
-  maxPriceInput.value = "";
-  loadListings();
-});
+const featuredGrid = document.getElementById("featuredGrid");
+const featuredStatus = document.getElementById("featuredStatus");
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, (char) => {
@@ -38,35 +21,10 @@ function escapeHTML(value) {
   });
 }
 
-function buildQuery() {
-  const params = new URLSearchParams();
-
-  const search = searchInput.value.trim();
-  const minPrice = minPriceInput.value.trim();
-  const maxPrice = maxPriceInput.value.trim();
-
-  if (search) params.set("search", search);
-  if (minPrice) params.set("minPrice", minPrice);
-  if (maxPrice) params.set("maxPrice", maxPrice);
-
-  const qs = params.toString();
-  return qs ? `?${qs}` : "";
-}
-
-function peso(n) {
-  try { return new Intl.NumberFormat("en-PH").format(n); }
-  catch { return n; }
-}
-
-function setStatus(message, tone = "neutral") {
-  statusEl.textContent = message;
-  statusEl.className = `status status-banner${tone === "error" ? " error" : ""}${tone === "success" ? " success" : ""}`;
-}
-
 function truncate(text, maxLength = 120) {
   const normalized = String(text ?? "").trim();
   if (!normalized) {
-    return "A comfortable condo listing with direct landlord contact and essentials ready to review.";
+    return "A student-friendly condo listing with clear details and direct landlord contact.";
   }
 
   if (normalized.length <= maxLength) {
@@ -88,10 +46,20 @@ function amenityTags(rawAmenities) {
   const amenities = getAmenities(rawAmenities);
 
   if (!amenities.length) {
-    return '<li class="tag">Inquire for amenities</li>';
+    return '<li class="tag">Ask for amenities</li>';
   }
 
   return amenities.map((item) => `<li class="tag">${escapeHTML(item)}</li>`).join("");
+}
+
+function peso(n) {
+  try { return new Intl.NumberFormat("en-PH").format(n); }
+  catch { return n; }
+}
+
+function setStatus(message, tone = "neutral") {
+  featuredStatus.textContent = message;
+  featuredStatus.className = `status status-banner${tone === "error" ? " error" : ""}${tone === "success" ? " success" : ""}`;
 }
 
 function loadingCards(count = 3) {
@@ -112,9 +80,10 @@ function loadingCards(count = 3) {
 function emptyStateHTML(title, copy) {
   return `
     <article class="card empty-state">
-      <p class="eyebrow">No matches yet</p>
+      <p class="eyebrow">Featured units</p>
       <h3 class="empty-state__title">${escapeHTML(title)}</h3>
       <p class="empty-state__copy">${escapeHTML(copy)}</p>
+      <a class="button-link button-link--ghost" href="listings.html">Browse All Listings</a>
     </article>
   `;
 }
@@ -190,35 +159,35 @@ function cardHTML(listing) {
   `;
 }
 
-async function loadListings() {
-  setStatus("Loading available listings...");
-  grid.innerHTML = loadingCards();
+async function loadFeaturedListings() {
+  setStatus("Loading featured units...");
+  featuredGrid.innerHTML = loadingCards();
 
   try {
-    const res = await fetch(`${API_BASE}/api/listings${buildQuery()}`);
-    if (!res.ok) throw new Error("Failed to load listings");
+    const res = await fetch(`${API_BASE}/api/listings`);
+    if (!res.ok) throw new Error("Failed to load featured units");
 
     const listings = await res.json();
+    const featured = listings.slice(0, 3);
 
-    if (!listings.length) {
-      setStatus("No listings matched the current search.");
-      grid.innerHTML = emptyStateHTML(
-        "No listings found",
-        "Try a different area or widen your price range to see more homes."
+    if (!featured.length) {
+      setStatus("No featured units available yet.");
+      featuredGrid.innerHTML = emptyStateHTML(
+        "Featured units are coming soon",
+        "Check back after listings are added, or open the full listings page later."
       );
       return;
     }
 
-    const label = listings.length === 1 ? "listing" : "listings";
-    setStatus(`${listings.length} ${label} available right now.`);
-    grid.innerHTML = listings.map(cardHTML).join("");
+    setStatus("Featured units pulled from the latest available listings.");
+    featuredGrid.innerHTML = featured.map(cardHTML).join("");
   } catch (err) {
-    setStatus(`Unable to load listings: ${err.message}`, "error");
-    grid.innerHTML = emptyStateHTML(
-      "Listings are temporarily unavailable",
-      "Please refresh the page or try again in a moment."
+    setStatus(`Unable to load featured units: ${err.message}`, "error");
+    featuredGrid.innerHTML = emptyStateHTML(
+      "Featured units are unavailable",
+      "Please try again in a moment or browse the listings page directly."
     );
   }
 }
 
-loadListings();
+loadFeaturedListings();

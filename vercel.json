@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "installCommand": "cd server && npm install",
+  "buildCommand": "rm -rf public && mkdir -p public && cp -R client/. public/ && cd server && npx prisma generate",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    }
+  ]
+}

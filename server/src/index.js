@@ -346,9 +346,15 @@ app.post("/api/upload", requireAdmin, upload.single("image"), async (req, res) =
   }
 });
 
-app.use(express.static(clientDir, { extensions: ["html"] }));
+if (!process.env.VERCEL) {
+  app.use(express.static(clientDir, { extensions: ["html"] }));
+}
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+module.exports = app;
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}

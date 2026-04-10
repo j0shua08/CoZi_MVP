@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi | Near-Campus Condo Search</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="public-page landing-page">
+  <main class="page-shell">
+    <section class="hero landing-hero" aria-labelledby="landingHeadline">
+      <div class="hero__copy">
+        <div class="brand-mark">
+          <span class="brand-mark__dot" aria-hidden="true"></span>
+          <span>CoZi</span>
+        </div>
+        <p class="eyebrow">Student condo search</p>
+        <h1 id="landingHeadline" class="hero__title">Find trusted condo units near your school</h1>
+        <p class="hero__text">
+          CoZi helps students browse condo listings near campus with clearer information,
+          easier comparison, and a more reliable search experience.
+        </p>
+
+        <div class="hero__actions">
+          <a class="button-link" href="listings.html">Browse Listings</a>
+          <a class="button-link button-link--ghost" href="#featuredUnits">View Featured Units</a>
+        </div>
+
+        <ul class="trust-list" aria-label="Trust signals">
+          <li class="trust-pill">Student-focused</li>
+          <li class="trust-pill">Clear listing details</li>
+          <li class="trust-pill">Near-campus units</li>
+        </ul>
+      </div>
+
+      <div class="landing-hero__visual" aria-hidden="true">
+        <div class="mockup">
+          <div class="mockup__frame">
+            <div class="mockup__toolbar">
+              <span class="mockup__dot"></span>
+              <span class="mockup__dot"></span>
+              <span class="mockup__dot"></span>
+            </div>
+
+            <div class="mockup__search">
+              <span>Search near campus</span>
+              <span class="mockup__chip">Trusted match</span>
+            </div>
+
+            <div class="mockup__grid">
+              <article class="mockup__listing">
+                <div class="mockup__thumb"></div>
+                <div class="mockup__copy">
+                  <div class="mockup__line mockup__line--lg"></div>
+                  <div class="mockup__line mockup__line--md"></div>
+                  <div class="mockup__line mockup__line--sm"></div>
+                </div>
+              </article>
+
+              <article class="mockup__listing">
+                <div class="mockup__thumb mockup__thumb--alt"></div>
+                <div class="mockup__copy">
+                  <div class="mockup__line mockup__line--lg"></div>
+                  <div class="mockup__line mockup__line--md"></div>
+                  <div class="mockup__line mockup__line--sm"></div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <article class="mockup__floating">
+            <span class="mockup__label">Near-campus search</span>
+            <p class="mockup__metric">Clearer details, faster choices.</p>
+            <p class="mockup__caption">Compare condos, review essentials, and contact landlords directly.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="results-section" aria-labelledby="whyCoziHeading">
+      <header class="results-head">
+        <div>
+          <p class="eyebrow">Why students use CoZi</p>
+          <h2 id="whyCoziHeading">Designed for faster, more confident condo search.</h2>
+        </div>
+      </header>
+
+      <div class="feature-grid">
+        <article class="card feature-card">
+          <p class="eyebrow">1</p>
+          <h3>Compare listings faster</h3>
+          <p>Scan location, monthly rate, and core amenities without opening multiple tabs first.</p>
+        </article>
+
+        <article class="card feature-card">
+          <p class="eyebrow">2</p>
+          <h3>See clearer unit information</h3>
+          <p>Review the essentials before deciding which condo is worth a closer look.</p>
+        </article>
+
+        <article class="card feature-card">
+          <p class="eyebrow">3</p>
+          <h3>Contact landlords directly</h3>
+          <p>Move from browsing to inquiry quickly once you find a near-campus unit that fits.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="featuredUnits" class="results-section" aria-labelledby="featuredHeading">
+      <header class="results-head">
+        <div>
+          <p class="eyebrow">Featured units</p>
+          <h2 id="featuredHeading">Start with the latest condo listings.</h2>
+        </div>
+        <a class="button-link button-link--ghost" href="listings.html">See All Listings</a>
+      </header>
+
+      <p id="featuredStatus" class="status status-banner" aria-live="polite"></p>
+      <section id="featuredGrid" class="listing-grid" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <script src="index.js"></script>
+</body>
+</html>
