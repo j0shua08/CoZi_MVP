@@ -22,5 +22,6 @@ model Listing {
   price         Int
   contactNumber String
   imageUrl      String?
+  images        Json?
   createdAt     DateTime @default(now())
 }
