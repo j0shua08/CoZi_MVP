@@ -2215,7 +2215,7 @@ button:hover,
     flex: 1;
   }
 
-  /* Compare modal — mobile */
+  /* Compare modal — mobile (vertical scroll, no horizontal swipe) */
   .compare-modal {
     padding: var(--space-2);
     align-items: flex-end;
@@ -2231,27 +2231,70 @@ button:hover,
     padding: var(--space-3) var(--space-4);
   }
 
-  /* On mobile, give each column a min-width so 3 listings can scroll horizontally */
+  /* Columns share available width — no horizontal overflow */
   .compare-modal__table-inner {
-    grid-template-columns: repeat(var(--compare-cols, 2), minmax(160px, 1fr));
-    min-width: max-content;
+    grid-template-columns: repeat(var(--compare-cols, 2), minmax(0, 1fr));
+    /* no min-width: max-content — columns flex to fit the screen */
   }
 
   .compare-header-row,
   .compare-section__row {
-    grid-template-columns: repeat(var(--compare-cols, 2), minmax(160px, 1fr));
+    grid-template-columns: repeat(var(--compare-cols, 2), minmax(0, 1fr));
   }
 
-  .compare-section__cell {
-    padding: var(--space-3) var(--space-4);
-  }
-
-  .compare-col-header__info {
-    padding: var(--space-3) var(--space-3);
-  }
-
+  /* Smaller photo so it doesn't dominate the screen */
   .compare-col-header__image {
-    height: 120px;
+    height: 90px;
+  }
+
+  /* Compact info block */
+  .compare-col-header__info {
+    padding: var(--space-2) var(--space-3);
+    gap: 4px;
+  }
+
+  .compare-col-header__title {
+    font-size: 0.82rem;
+    /* Clamp to 2 lines instead of wrapping indefinitely */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .compare-col-header__location {
+    font-size: 0.74rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .compare-col-header__price {
+    font-size: 1rem;
+  }
+
+  /* Tighter cell padding */
+  .compare-section__cell {
+    padding: var(--space-3);
+    font-size: 0.86rem;
+  }
+
+  .compare-section__label {
+    padding: 8px var(--space-3);
+  }
+
+  /* Clamp description to 4 lines on mobile */
+  .compare-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Smaller tags */
+  .compare-section__cell .tag {
+    font-size: 0.72rem;
+    padding: 4px 8px;
   }
 
   .lightbox {
