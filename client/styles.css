@@ -1400,6 +1400,173 @@ button:hover,
   box-shadow: none;
 }
 
+/* ── Admin form fields ──────────────────────────────── */
+
+.admin-field-section {
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.admin-field-section:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.admin-field {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-field__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.admin-field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+@media (max-width: 600px) {
+  .admin-field-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-field-section select,
+.admin-field-section input[type="text"],
+.admin-field-section input[type="number"],
+.admin-field-section input[type="tel"],
+.admin-field-section textarea,
+.admin-field > select,
+.admin-field > input,
+.admin-field > textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.96rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.admin-field > select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236d5a4a' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.admin-field-section input:focus,
+.admin-field-section select:focus,
+.admin-field-section textarea:focus,
+.admin-field > input:focus,
+.admin-field > select:focus,
+.admin-field > textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+/* ── Amenity checkboxes ─────────────────────────────── */
+
+.admin-amenity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 8px 12px;
+}
+
+.admin-amenity-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  user-select: none;
+}
+
+.admin-amenity-item:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.admin-amenity-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.admin-amenity-item:has(input:checked) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+
+/* ── Price preview ──────────────────────────────────── */
+
+.admin-price-preview {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.admin-price-preview--active {
+  color: var(--accent);
+}
+
+/* ── Counter & hint ─────────────────────────────────── */
+
+.admin-field-counter {
+  margin-left: auto;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.admin-field-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.admin-field-hint--ok {
+  color: #2e7d55;
+}
+
+.admin-field-hint--error {
+  color: #b94040;
+}
+
 /* ── Listing card footer ────────────────────────────── */
 
 .listing-card__footer {

@@ -68,35 +68,116 @@
         </div>
       </section>
 
-      <label>
-        Title
-        <input type="text" name="title" required />
-      </label>
+      <!-- Title -->
+      <div class="admin-field-section">
+        <label class="admin-field">
+          <span class="admin-field__label">Title <span class="admin-field-counter" id="titleCounter">0/80</span></span>
+          <input type="text" id="titleInput" maxlength="80" required placeholder="e.g., Fully Furnished Studio near ADMU" />
+        </label>
+      </div>
 
-      <label>
-        Description
-        <textarea name="description" rows="4" required></textarea>
-      </label>
+      <!-- Description -->
+      <div class="admin-field-section">
+        <label class="admin-field">
+          <span class="admin-field__label">Description</span>
+          <textarea id="descriptionInput" rows="4" required placeholder="Describe the unit, its highlights, and proximity to campus..."></textarea>
+        </label>
+      </div>
 
-      <label>
-        Location
-        <input type="text" name="location" required />
-      </label>
+      <!-- Location -->
+      <div class="admin-field-section">
+        <p class="section-label">Location</p>
+        <div class="admin-field-row">
+          <label class="admin-field">
+            <span class="admin-field__label">Building / Property Name</span>
+            <input type="text" id="buildingName" required placeholder="e.g., Katipunan Residences" />
+          </label>
+          <label class="admin-field">
+            <span class="admin-field__label">Area / Barangay</span>
+            <input type="text" id="areaInput" required placeholder="e.g., Loyola Heights, Quezon City" />
+          </label>
+        </div>
+      </div>
 
-      <label>
-        Amenities (text)
-        <input type="text" name="amenities" placeholder="WiFi, Aircon, Desk" required />
-      </label>
+      <!-- Unit Details -->
+      <div class="admin-field-section">
+        <p class="section-label">Unit Details</p>
+        <div class="admin-field-row">
+          <label class="admin-field">
+            <span class="admin-field__label">Bedrooms</span>
+            <select id="bedroomsInput" required>
+              <option value="">Select...</option>
+              <option value="Studio">Studio</option>
+              <option value="1BR">1BR</option>
+              <option value="2BR">2BR</option>
+              <option value="3BR+">3BR+</option>
+            </select>
+          </label>
+          <label class="admin-field">
+            <span class="admin-field__label">Furnished Status</span>
+            <select id="furnishedInput" required>
+              <option value="">Select...</option>
+              <option value="Fully Furnished">Fully Furnished</option>
+              <option value="Semi-Furnished">Semi-Furnished</option>
+              <option value="Bare">Bare</option>
+              <option value="Unfurnished">Unfurnished</option>
+            </select>
+          </label>
+        </div>
+        <div class="admin-field-row">
+          <label class="admin-field">
+            <span class="admin-field__label">Size (sqm)</span>
+            <input type="number" id="sizeInput" min="1" placeholder="e.g., 28" />
+          </label>
+          <label class="admin-field">
+            <span class="admin-field__label">Floor Number</span>
+            <input type="number" id="floorInput" min="1" placeholder="e.g., 5" />
+          </label>
+        </div>
+      </div>
 
-      <label>
-        Price (PHP/month)
-        <input type="number" name="price" min="0" required />
-      </label>
+      <!-- Amenities -->
+      <div class="admin-field-section">
+        <p class="section-label">Amenities</p>
+        <div class="admin-amenity-grid">
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Aircon" /> Aircon</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="WiFi" /> WiFi</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Parking" /> Parking</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Pool" /> Pool</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Gym" /> Gym</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Study Hall" /> Study Hall</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Function Hall" /> Function Hall</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="CCTV" /> CCTV</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Generator" /> Generator</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Elevator" /> Elevator</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Furnished" /> Furnished</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Washer/Dryer" /> Washer/Dryer</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Water included" /> Water included</label>
+          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Electric included" /> Electric included</label>
+        </div>
+        <label class="admin-field" style="margin-top:12px;">
+          <span class="admin-field__label">Custom amenities <span class="admin-field-hint">(comma-separated)</span></span>
+          <input type="text" id="customAmenities" placeholder="e.g., Balcony, Study nook, Netflix included" />
+        </label>
+      </div>
 
-      <label>
-        Contact Number
-        <input type="text" name="contactNumber" required />
-      </label>
+      <!-- Price -->
+      <div class="admin-field-section">
+        <label class="admin-field">
+          <span class="admin-field__label">Price (PHP/month)</span>
+          <input type="number" id="priceInput" min="0" required placeholder="e.g., 15000" />
+        </label>
+        <p class="admin-price-preview" id="pricePreview">Enter a price to see the formatted amount.</p>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="admin-field-section">
+        <label class="admin-field">
+          <span class="admin-field__label">Contact Number <span class="admin-field-hint">(PH mobile, e.g. 09171234567)</span></span>
+          <input type="tel" id="contactInput" maxlength="11" placeholder="09XXXXXXXXX" required />
+        </label>
+        <p class="admin-field-hint" id="contactHint"></p>
+      </div>
 
       <button type="submit">Add Listing</button>
       <p id="status" class="status"></p>
