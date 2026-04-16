@@ -8,101 +8,69 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="public-page landing-page">
+  <header class="site-nav" aria-label="Primary navigation">
+    <a class="site-nav__brand" href="index.html" aria-label="CoZi home">
+      <span class="site-nav__brand-mark" aria-hidden="true"></span>
+      <span>CoZi</span>
+    </a>
+
+    <nav class="site-nav__links" aria-label="Landing page links">
+      <a href="#howItWorks">How it works</a>
+      <a href="#featuredUnits">Featured</a>
+      <a href="listings.html">Listings</a>
+    </nav>
+  </header>
+
   <main class="page-shell">
     <section class="hero landing-hero" aria-labelledby="landingHeadline">
+      <img
+        class="landing-hero__image"
+        src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1600&q=82"
+        alt=""
+        aria-hidden="true"
+      />
+
       <div class="hero__copy">
-        <div class="brand-mark">
-          <span class="brand-mark__dot" aria-hidden="true"></span>
-          <span>CoZi</span>
-        </div>
-        <p class="eyebrow">Student condo search</p>
-        <h1 id="landingHeadline" class="hero__title">Find trusted condo units near your school</h1>
+        <h1 id="landingHeadline" class="hero__title">Find a trusted condo near campus.</h1>
         <p class="hero__text">
-          CoZi helps students browse condo listings near campus with clearer information,
-          easier comparison, and a more reliable search experience.
+          CoZi helps students compare near-campus listings with clear details, reliable photos, and direct landlord contact.
         </p>
 
-        <div class="hero__actions">
+        <div class="hero__actions" aria-label="Primary actions">
           <a class="button-link" href="listings.html">Browse Listings</a>
-          <a class="button-link button-link--ghost" href="#featuredUnits">View Featured Units</a>
-        </div>
-
-        <ul class="trust-list" aria-label="Trust signals">
-          <li class="trust-pill">Student-focused</li>
-          <li class="trust-pill">Clear listing details</li>
-          <li class="trust-pill">Near-campus units</li>
-        </ul>
-      </div>
-
-      <div class="landing-hero__visual" aria-hidden="true">
-        <div class="mockup">
-          <div class="mockup__frame">
-            <div class="mockup__toolbar">
-              <span class="mockup__dot"></span>
-              <span class="mockup__dot"></span>
-              <span class="mockup__dot"></span>
-            </div>
-
-            <div class="mockup__search">
-              <span>Search near campus</span>
-              <span class="mockup__chip">Trusted match</span>
-            </div>
-
-            <div class="mockup__grid">
-              <article class="mockup__listing">
-                <div class="mockup__thumb"></div>
-                <div class="mockup__copy">
-                  <div class="mockup__line mockup__line--lg"></div>
-                  <div class="mockup__line mockup__line--md"></div>
-                  <div class="mockup__line mockup__line--sm"></div>
-                </div>
-              </article>
-
-              <article class="mockup__listing">
-                <div class="mockup__thumb mockup__thumb--alt"></div>
-                <div class="mockup__copy">
-                  <div class="mockup__line mockup__line--lg"></div>
-                  <div class="mockup__line mockup__line--md"></div>
-                  <div class="mockup__line mockup__line--sm"></div>
-                </div>
-              </article>
-            </div>
-          </div>
-
-          <article class="mockup__floating">
-            <span class="mockup__label">Near-campus search</span>
-            <p class="mockup__metric">Clearer details, faster choices.</p>
-            <p class="mockup__caption">Compare condos, review essentials, and contact landlords directly.</p>
-          </article>
+          <a class="button-link button-link--ghost" href="#howItWorks">How CoZi Works</a>
         </div>
       </div>
     </section>
 
-    <section class="results-section" aria-labelledby="whyCoziHeading">
-      <header class="results-head">
+    <section id="howItWorks" class="landing-section" aria-labelledby="whyCoziHeading">
+      <header class="section-intro">
         <div>
-          <p class="eyebrow">Why students use CoZi</p>
-          <h2 id="whyCoziHeading">Designed for faster, more confident condo search.</h2>
+          <p class="eyebrow">How it works</p>
+          <h2 id="whyCoziHeading">A calmer way to shortlist student housing.</h2>
         </div>
+        <p>
+          Start with the essentials, compare homes at a glance, and reach out only when a listing feels worth your time.
+        </p>
       </header>
 
       <div class="feature-grid">
         <article class="card feature-card">
-          <p class="eyebrow">1</p>
-          <h3>Compare listings faster</h3>
-          <p>Scan location, monthly rate, and core amenities without opening multiple tabs first.</p>
+          <span class="step-number">01</span>
+          <h3>Search near campus</h3>
+          <p>Browse condos around school-friendly locations without sorting through unrelated rentals.</p>
         </article>
 
         <article class="card feature-card">
-          <p class="eyebrow">2</p>
-          <h3>See clearer unit information</h3>
-          <p>Review the essentials before deciding which condo is worth a closer look.</p>
+          <span class="step-number">02</span>
+          <h3>Compare the essentials</h3>
+          <p>Review price, location, amenities, and photos in a consistent layout made for quick decisions.</p>
         </article>
 
         <article class="card feature-card">
-          <p class="eyebrow">3</p>
-          <h3>Contact landlords directly</h3>
-          <p>Move from browsing to inquiry quickly once you find a near-campus unit that fits.</p>
+          <span class="step-number">03</span>
+          <h3>Contact with confidence</h3>
+          <p>Use the listing details to confirm availability, viewing schedules, and move-in questions directly.</p>
         </article>
       </div>
     </section>
@@ -110,16 +78,61 @@
     <section id="featuredUnits" class="results-section" aria-labelledby="featuredHeading">
       <header class="results-head">
         <div>
-          <p class="eyebrow">Featured units</p>
-          <h2 id="featuredHeading">Start with the latest condo listings.</h2>
+          <p class="eyebrow">Featured listings</p>
+          <h2 id="featuredHeading">Start with condos worth a closer look.</h2>
         </div>
-        <a class="button-link button-link--ghost" href="listings.html">See All Listings</a>
+        <a class="text-link" href="listings.html">See all listings</a>
       </header>
 
       <p id="featuredStatus" class="status status-banner" aria-live="polite"></p>
       <section id="featuredGrid" class="listing-grid" aria-live="polite"></section>
     </section>
+
+    <section class="trust-section" aria-labelledby="trustHeading">
+      <div class="trust-section__inner">
+        <div class="trust-section__copy">
+          <p class="eyebrow">Why CoZi</p>
+          <h2 id="trustHeading">Built for the way students actually search.</h2>
+          <p>
+            CoZi keeps the experience focused on trust, readable details, and practical next steps, so students can move from browsing to inquiry without the noise.
+          </p>
+        </div>
+
+        <ul class="value-list">
+          <li>
+            <strong>Near-campus focus</strong>
+            <span>Listings centered around student routines.</span>
+          </li>
+          <li>
+            <strong>Clear listing format</strong>
+            <span>Consistent photos, pricing, amenities, and contact info.</span>
+          </li>
+          <li>
+            <strong>Low-friction inquiries</strong>
+            <span>Contact details stay easy to find when a unit feels right.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="landing-section">
+      <div class="landing-cta">
+        <div>
+          <p class="eyebrow">Ready to look?</p>
+          <h2>Find your next student condo with less clutter.</h2>
+          <p>Browse the latest homes and save your energy for the listings that fit.</p>
+        </div>
+        <a class="text-link" href="listings.html">Browse all listings</a>
+      </div>
+    </section>
   </main>
+
+  <footer class="landing-footer">
+    <div class="landing-footer__bar">
+      <p>CoZi</p>
+      <p>Trusted near-campus condo search for students.</p>
+    </div>
+  </footer>
 
   <script src="index.js"></script>
 </body>

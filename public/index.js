@@ -2,7 +2,7 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://localhost:3001"
   : window.location.origin;
 const IMAGE_LABELS = ["bedroom", "bathroom", "kitchen", "living room", "cover photo"];
-const IMAGE_PLACEHOLDER = "https://placehold.co/900x680/f5ecdf/6d5a4a?text=CoZi";
+const IMAGE_PLACEHOLDER = "https://placehold.co/900x680/f3f6f1/2f6b57?text=CoZi";
 
 const featuredGrid = document.getElementById("featuredGrid");
 const featuredStatus = document.getElementById("featuredStatus");
@@ -83,7 +83,7 @@ function emptyStateHTML(title, copy) {
       <p class="eyebrow">Featured units</p>
       <h3 class="empty-state__title">${escapeHTML(title)}</h3>
       <p class="empty-state__copy">${escapeHTML(copy)}</p>
-      <a class="button-link button-link--ghost" href="listings.html">Browse All Listings</a>
+      <a class="text-link" href="listings.html">Browse all listings</a>
     </article>
   `;
 }
@@ -153,7 +153,7 @@ function cardHTML(listing) {
           ${amenityTags(listing.amenities)}
         </ul>
 
-        <a class="button-link" href="${href}">View Details</a>
+        <a class="listing-card__link" href="${href}">View details</a>
       </div>
     </article>
   `;

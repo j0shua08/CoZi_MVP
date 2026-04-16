@@ -2,7 +2,7 @@ const API_BASE = ["localhost", "127.0.0.1"].includes(window.location.hostname)
   ? "http://localhost:3001"
   : window.location.origin;
 const IMAGE_LABELS = ["bedroom", "bathroom", "kitchen", "living room", "cover photo"];
-const IMAGE_PLACEHOLDER = "https://placehold.co/1200x800/f5ecdf/6d5a4a?text=CoZi";
+const IMAGE_PLACEHOLDER = "https://placehold.co/1200x800/f3f6f1/2f6b57?text=CoZi";
 
 const statusEl = document.getElementById("detailStatus");
 const cardEl = document.getElementById("detailCard");

@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoZi | Listings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -13,33 +15,21 @@
       <a class="back-link" href="index.html">Home</a>
     </div>
 
-    <section class="hero" aria-label="CoZi overview">
+    <section class="hero hero--simple" aria-label="CoZi listings overview">
       <div class="hero__copy">
         <p class="eyebrow">CoZi Listings</p>
-        <h1 class="hero__title">Warm, move-in ready spaces you can trust.</h1>
+        <h1 class="hero__title">Browse trusted condos near campus.</h1>
         <p class="hero__text">
-          Browse condo listings built for quick decisions. Filter by area or budget,
-          compare the essentials, and open each home profile when you are ready to contact the landlord.
+          Filter by area or budget, compare the essentials, and open each home profile when you are ready to contact the landlord.
         </p>
-      </div>
-
-      <div class="hero__aside">
-        <article class="hero__stat">
-          <strong class="hero__stat-value">Direct contact</strong>
-          <p class="hero__stat-copy">Each listing surfaces the landlord contact so inquiries stay simple and fast.</p>
-        </article>
-        <article class="hero__stat">
-          <strong class="hero__stat-value">Clean filters</strong>
-          <p class="hero__stat-copy">Search by title, location, and budget without leaving the page.</p>
-        </article>
       </div>
     </section>
 
     <section class="card card-elevated search-panel">
       <div class="search-panel__intro">
         <p class="eyebrow">Find a fit</p>
-        <h2>Browse available condos with confidence.</h2>
-        <p>Use search and budget filters to narrow the list before opening full listing details.</p>
+        <h2>Use simple filters to narrow the list.</h2>
+        <p>Search by neighborhood, building, or budget before opening full listing details.</p>
       </div>
 
       <form id="searchForm" class="search-form">
@@ -80,6 +70,39 @@
       <section id="listingsGrid" class="listing-grid" aria-live="polite"></section>
     </section>
   </main>
+
+  <!-- ── Compare Bar ─────────────────────────────────────── -->
+  <div class="compare-bar" id="compareBar" aria-label="Listing comparison bar">
+    <div class="compare-bar__inner">
+      <div class="compare-bar__left">
+        <p class="compare-bar__hint">Compare up to 3 listings</p>
+        <div class="compare-bar__slots" id="compareSlots"></div>
+      </div>
+      <div class="compare-bar__actions">
+        <button type="button" id="compareOpenBtn" class="compare-bar__submit" disabled>
+          Compare
+        </button>
+        <button type="button" id="compareClearBtn" class="button-ghost compare-bar__clear">Clear all</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Compare Modal ──────────────────────────────────── -->
+  <div class="compare-modal" id="compareModal" hidden role="dialog" aria-modal="true" aria-label="Compare listings">
+    <div class="compare-modal__backdrop" data-compare-close></div>
+    <div class="compare-modal__panel">
+      <div class="compare-modal__header">
+        <div>
+          <p class="eyebrow">Side-by-side</p>
+          <h2 class="compare-modal__title">Compare listings</h2>
+        </div>
+        <button type="button" class="compare-modal__close" data-compare-close aria-label="Close comparison">Close</button>
+      </div>
+      <div class="compare-modal__scroll">
+        <div class="compare-modal__table" id="compareTable"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="listings.js"></script>
 </body>

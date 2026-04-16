@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CoZi | Listing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -24,6 +26,42 @@
       <section id="detailCard"></section>
     </section>
   </main>
+
+  <!-- ── Listing Selector Modal ───────────────────────────── -->
+  <div class="selector-modal" id="selectorModal" hidden role="dialog" aria-modal="true" aria-label="Choose a listing to compare">
+    <div class="selector-modal__backdrop" data-selector-close></div>
+    <div class="selector-modal__panel">
+      <div class="selector-modal__header">
+        <div>
+          <p class="eyebrow">Compare with</p>
+          <h2 class="selector-modal__title">Choose a listing to compare</h2>
+          <p class="selector-modal__sub" id="selectorSub">Select up to 2 more listings</p>
+        </div>
+        <button type="button" class="selector-modal__close" data-selector-close aria-label="Close">Close</button>
+      </div>
+      <div class="selector-modal__body" id="selectorGrid"></div>
+      <div class="selector-modal__footer" id="selectorFooter" hidden>
+        <button type="button" id="compareNowBtn" class="selector-modal__cta">Compare listings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Compare Modal ──────────────────────────────────── -->
+  <div class="compare-modal" id="compareModal" hidden role="dialog" aria-modal="true" aria-label="Compare listings">
+    <div class="compare-modal__backdrop" data-compare-close></div>
+    <div class="compare-modal__panel">
+      <div class="compare-modal__header">
+        <div>
+          <p class="eyebrow">Side-by-side</p>
+          <h2 class="compare-modal__title">Compare listings</h2>
+        </div>
+        <button type="button" class="compare-modal__close" data-compare-close aria-label="Close comparison">Close</button>
+      </div>
+      <div class="compare-modal__scroll">
+        <div class="compare-modal__table" id="compareTable"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="listing.js"></script>
 </body>
