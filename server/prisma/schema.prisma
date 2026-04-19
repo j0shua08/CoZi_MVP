@@ -23,5 +23,9 @@ model Listing {
   contactNumber String
   imageUrl      String?
   images        Json?
+  bedrooms      String?
+  furnished     String?
+  sizesqm       Int?
+  floor         Int?
   createdAt     DateTime @default(now())
 }

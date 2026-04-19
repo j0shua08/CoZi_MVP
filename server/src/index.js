@@ -220,6 +220,10 @@ app.post("/api/listings", requireAdmin, async (req, res) => {
       amenities,
       price,
       contactNumber,
+      bedrooms,
+      furnished,
+      sizesqm,
+      floor,
     } = req.body;
     const { imageUrl, images } = buildListingImageData(req.body.images, req.body.imageUrl);
 
@@ -233,6 +237,10 @@ app.post("/api/listings", requireAdmin, async (req, res) => {
         contactNumber,
         imageUrl,
         images,
+        bedrooms: bedrooms || null,
+        furnished: furnished || null,
+        sizesqm: sizesqm ? Number(sizesqm) : null,
+        floor: floor ? Number(floor) : null,
       },
     });
 
@@ -257,6 +265,10 @@ app.put("/api/listings/:id", requireAdmin, async (req, res) => {
       amenities,
       price,
       contactNumber,
+      bedrooms,
+      furnished,
+      sizesqm,
+      floor,
     } = req.body;
     const { imageUrl, images } = buildListingImageData(req.body.images, req.body.imageUrl);
 
@@ -271,6 +283,10 @@ app.put("/api/listings/:id", requireAdmin, async (req, res) => {
         contactNumber,
         imageUrl,
         images,
+        bedrooms: bedrooms || null,
+        furnished: furnished || null,
+        sizesqm: sizesqm ? Number(sizesqm) : null,
+        floor: floor ? Number(floor) : null,
       },
     });
 
