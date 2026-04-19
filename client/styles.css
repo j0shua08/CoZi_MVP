@@ -1071,6 +1071,7 @@ button:hover,
 .detail-card__section p {
   margin: 0;
   color: var(--text-muted);
+  white-space: pre-wrap;
 }
 
 .detail-gallery {
