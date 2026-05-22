@@ -667,7 +667,11 @@ app.patch("/api/admin/landlords/:id/verify", requireAdmin, async (req, res) => {
 
 // ── Landlord auth ─────────────────────────────────────────────
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend;
+function getResend() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 
 function generateToken() {
   return crypto.randomBytes(32).toString("hex");
@@ -679,7 +683,7 @@ function expiresAt(hours) {
 
 async function sendEmail(to, subject, html) {
   const from = process.env.RESEND_FROM || "CoZi <onboarding@resend.dev>";
-  const { error } = await resend.emails.send({ from, to, subject, html });
+  const { error } = await getResend().emails.send({ from, to, subject, html });
   if (error) throw new Error(error.message);
 }
 
