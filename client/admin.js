@@ -6,7 +6,7 @@ const IMAGE_LABELS = ["bedroom", "bathroom", "kitchen", "living room", "cover ph
 const IMAGE_PLACEHOLDER = "https://placehold.co/120x90/f5ecdf/6d5a4a?text=CoZi";
 const PRESET_AMENITIES = [
   "Aircon", "WiFi", "Parking", "Pool", "Gym", "Study Hall", "Function Hall",
-  "CCTV", "Generator", "Elevator", "Furnished", "Washer/Dryer", "Water included", "Electric included",
+  "CCTV", "Generator", "Elevator", "Washer/Dryer", "Water included", "Electric included",
 ];
 
 if (!token) window.location.href = "admin-login.html";
@@ -27,10 +27,14 @@ const titleCounter  = document.getElementById("titleCounter");
 const descInput     = document.getElementById("descriptionInput");
 const buildingInput = document.getElementById("buildingName");
 const areaInput     = document.getElementById("areaInput");
-const bedroomsInput = document.getElementById("bedroomsInput");
-const furnishedInput = document.getElementById("furnishedInput");
-const sizeInput     = document.getElementById("sizeInput");
-const floorInput    = document.getElementById("floorInput");
+const bedroomsInput      = document.getElementById("bedroomsInput");
+const bathroomsInput     = document.getElementById("bathroomsInput");
+const furnishedInput     = document.getElementById("furnishedInput");
+const petsAllowedInput   = document.getElementById("petsAllowedInput");
+const sizeInput          = document.getElementById("sizeInput");
+const floorInput         = document.getElementById("floorInput");
+const leaseTermInput     = document.getElementById("leaseTermInput");
+const advanceDepositInput = document.getElementById("advanceDepositInput");
 const priceInput    = document.getElementById("priceInput");
 const pricePreview  = document.getElementById("pricePreview");
 const contactInput  = document.getElementById("contactInput");
@@ -205,7 +209,7 @@ function collectAmenities() {
   const checked = [...document.querySelectorAll('input[name="amenity"]:checked')].map((cb) => cb.value);
   const customRaw = customAmenities.value.trim();
   const custom = customRaw ? customRaw.split(",").map((a) => a.trim()).filter(Boolean) : [];
-  return [...checked, ...custom].join(", ");
+  return [...checked, ...custom];
 }
 
 function collectLocation() {
@@ -227,9 +231,13 @@ function resetForm() {
   buildingInput.value = "";
   areaInput.value = "";
   bedroomsInput.value = "";
+  bathroomsInput.value = "";
   furnishedInput.value = "";
+  petsAllowedInput.value = "";
   sizeInput.value = "";
   floorInput.value = "";
+  leaseTermInput.value = "";
+  advanceDepositInput.value = "";
   priceInput.value = "";
   pricePreview.textContent = "Enter a price to see the formatted amount.";
   contactInput.value = "";
@@ -266,9 +274,13 @@ async function loadListings() {
           <strong>${escapeHTML(listing.title)}</strong><br/>
           <small>${escapeHTML(listing.location)} • ₱${escapeHTML(String(listing.price))}</small><br/>
           <small>${imageCount} photo${imageCount === 1 ? "" : "s"} saved</small>
-          <div style="margin-top:10px; display:flex; gap:8px;">
+          <div style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
             <button data-action="edit" data-id="${listing.id}">Edit</button>
             <button data-action="delete" data-id="${listing.id}">Delete</button>
+            <label class="verify-toggle" style="margin-left:4px;">
+              <input type="checkbox" data-action="verify" data-id="${listing.id}" ${listing.verified ? "checked" : ""} />
+              <span data-verify-label="${listing.id}">${listing.verified ? "✓ Verified" : "Not verified"}</span>
+            </label>
           </div>
         </div>
       </div>
@@ -281,6 +293,26 @@ async function loadListings() {
       const id = Number(button.dataset.id);
       if (action === "edit") await startEdit(id);
       else if (action === "delete") await deleteListing(id);
+    });
+  });
+
+  adminListingsEl.querySelectorAll("input[data-action='verify']").forEach((checkbox) => {
+    checkbox.addEventListener("change", async () => {
+      const id       = Number(checkbox.dataset.id);
+      const verified = checkbox.checked;
+      const label    = adminListingsEl.querySelector(`[data-verify-label="${id}"]`);
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/listings/${id}/verify`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ verified }),
+        });
+        if (!res.ok) throw new Error();
+        if (label) label.textContent = verified ? "✓ Verified" : "Not verified";
+      } catch {
+        alert("Failed to update verification. Please try again.");
+        checkbox.checked = !verified;
+      }
     });
   });
 }
@@ -316,12 +348,16 @@ async function startEdit(id) {
 
   // Unit details
   bedroomsInput.value = listing.bedrooms || "";
+  bathroomsInput.value = listing.bathrooms || "";
   furnishedInput.value = listing.furnished || "";
+  petsAllowedInput.value = listing.petsAllowed || "";
   sizeInput.value = listing.sizesqm || "";
   floorInput.value = listing.floor || "";
+  leaseTermInput.value = listing.leaseTerm || "";
+  advanceDepositInput.value = listing.advanceDeposit || "";
 
-  // Amenities: check presets, put rest in custom
-  const amenityList = String(listing.amenities || "").split(",").map((a) => a.trim()).filter(Boolean);
+  // Amenities: API now returns an array
+  const amenityList = Array.isArray(listing.amenities) ? listing.amenities : [];
   document.querySelectorAll('input[name="amenity"]').forEach((cb) => {
     cb.checked = amenityList.includes(cb.value);
   });
@@ -394,9 +430,13 @@ form.addEventListener("submit", async (event) => {
       price: Number(priceInput.value.trim()),
       contactNumber: contactInput.value.trim(),
       bedrooms: bedroomsInput.value || null,
+      bathrooms: bathroomsInput.value || null,
       furnished: furnishedInput.value || null,
+      petsAllowed: petsAllowedInput.value || null,
       sizesqm: sizeRaw ? Number(sizeRaw) : null,
       floor: floorRaw ? Number(floorRaw) : null,
+      leaseTerm: leaseTermInput.value || null,
+      advanceDeposit: advanceDepositInput.value.trim() || null,
       imageUrl: coverPhotoUrl,
       images,
     };
@@ -440,7 +480,87 @@ imageInputs.forEach(({ label, removeButton }) => {
   removeButton?.addEventListener("click", () => removeImageSlot(label));
 });
 
+// ── Landlord verification ────────────────────────────────────
+
+const landlordsTableEl = document.getElementById("landlordsTable");
+
+async function loadLandlords() {
+  try {
+    const res = await fetch(`${API_BASE}/api/admin/landlords`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) throw new Error();
+    const landlords = await res.json();
+    renderLandlordsTable(landlords);
+  } catch {
+    landlordsTableEl.innerHTML = `<p style="color:var(--error);font-size:.875rem;">Failed to load landlords.</p>`;
+  }
+}
+
+function renderLandlordsTable(landlords) {
+  if (!landlords.length) {
+    landlordsTableEl.innerHTML = `<p style="color:var(--text-muted);font-size:.875rem;">No landlords have signed up yet.</p>`;
+    return;
+  }
+
+  landlordsTableEl.innerHTML = `
+    <table class="landlord-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Email verified</th>
+          <th>Listings</th>
+          <th>CoZi verified</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${landlords.map((l) => `
+          <tr>
+            <td>${escapeHTML(l.fullName)}</td>
+            <td>${escapeHTML(l.email)}</td>
+            <td>${l.emailVerified ? "✓ Yes" : "No"}</td>
+            <td>${l._count?.listings ?? 0}</td>
+            <td>
+              <label class="verify-toggle">
+                <input
+                  type="checkbox"
+                  data-landlord-id="${l.id}"
+                  ${l.isVerified ? "checked" : ""}
+                />
+                <span>${l.isVerified ? "Verified" : "Not verified"}</span>
+              </label>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  landlordsTableEl.querySelectorAll("input[data-landlord-id]").forEach((checkbox) => {
+    checkbox.addEventListener("change", async () => {
+      const id         = Number(checkbox.dataset.landlordId);
+      const isVerified = checkbox.checked;
+      const label      = checkbox.nextElementSibling;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/admin/landlords/${id}/verify`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ isVerified }),
+        });
+        if (!res.ok) throw new Error();
+        label.textContent = isVerified ? "Verified" : "Not verified";
+      } catch {
+        alert("Failed to update verification status.");
+        checkbox.checked = !isVerified;
+      }
+    });
+  });
+}
+
 // ── Init ─────────────────────────────────────────────────────
 
 renderImagePreviews();
 loadListings();
+loadLandlords();

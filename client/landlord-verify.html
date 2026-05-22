@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi | Verifying your account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="public-page auth-page">
+  <header class="site-nav" aria-label="Primary navigation">
+    <a class="site-nav__brand" href="index.html" aria-label="CoZi home">
+      <span class="site-nav__brand-mark" aria-hidden="true"></span>
+      <span>CoZi</span>
+    </a>
+  </header>
+
+  <main class="auth-shell">
+    <div class="auth-container">
+      <div class="card auth-card">
+        <div id="verifyState" class="auth-verify" aria-live="polite">
+          <p class="auth-verify__icon">⏳</p>
+          <h2>Verifying your email…</h2>
+          <p>Please wait a moment.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="landlord-verify.js"></script>
+</body>
+</html>

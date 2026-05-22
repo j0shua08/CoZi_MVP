@@ -13,19 +13,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Landlord {
+  id                         Int       @id @default(autoincrement())
+  fullName                   String
+  email                      String    @unique
+  passwordHash               String
+  emailVerified              Boolean   @default(false)
+  isVerified                 Boolean   @default(false)
+  verificationToken          String?
+  verificationTokenExpiresAt DateTime?
+  resetToken                 String?
+  resetTokenExpiresAt        DateTime?
+  createdAt                  DateTime  @default(now())
+  listings                   Listing[]
+}
+
 model Listing {
-  id            Int      @id @default(autoincrement())
-  title         String
-  description   String
-  location      String
-  amenities     String
-  price         Int
-  contactNumber String
-  imageUrl      String?
-  images        Json?
-  bedrooms      String?
-  furnished     String?
-  sizesqm       Int?
-  floor         Int?
-  createdAt     DateTime @default(now())
+  id             Int       @id @default(autoincrement())
+  landlordId     Int?
+  landlord       Landlord? @relation(fields: [landlordId], references: [id])
+  title          String
+  description    String
+  location       String
+  amenities      String?
+  price          Int
+  contactNumber  String
+  imageUrl       String?
+  images         Json?
+  bedrooms       String?
+  bathrooms      String?
+  furnished      String?
+  sizesqm        Float?
+  floor          Int?
+  leaseTerm      String?
+  advanceDeposit String?
+  petsAllowed    String?
+  viberNumber    String?
+  messengerUrl   String?
+  contactEmail   String?
+  verified       Boolean   @default(false)
+  status         String    @default("available")
+  viewCount      Int       @default(0)
+  createdAt      DateTime  @default(now())
 }

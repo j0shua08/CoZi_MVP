@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi | List Your Property</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="public-page auth-page">
+  <header class="site-nav" aria-label="Primary navigation">
+    <a class="site-nav__brand" href="index.html" aria-label="CoZi home">
+      <span class="site-nav__brand-mark" aria-hidden="true"></span>
+      <span>CoZi</span>
+    </a>
+    <nav class="site-nav__links">
+      <a href="listings.html">Browse listings</a>
+      <a href="landlord-login.html">Log in</a>
+    </nav>
+  </header>
+
+  <main class="auth-shell">
+    <div class="auth-container">
+      <div class="auth-header">
+        <p class="eyebrow">For landlords</p>
+        <h1 class="auth-title">List your property with CoZi</h1>
+        <p class="auth-subtitle">Reach thousands of students looking for housing near campus.</p>
+      </div>
+
+      <div class="card auth-card">
+        <form id="signupForm" novalidate>
+          <div class="auth-field">
+            <label class="auth-field__label" for="fullName">Full Name</label>
+            <input type="text" id="fullName" autocomplete="name" placeholder="Juan dela Cruz" required />
+          </div>
+          <div class="auth-field">
+            <label class="auth-field__label" for="email">Email</label>
+            <input type="email" id="email" autocomplete="email" placeholder="you@email.com" required />
+          </div>
+          <div class="auth-field">
+            <label class="auth-field__label" for="password">Password</label>
+            <input type="password" id="password" autocomplete="new-password" placeholder="At least 8 characters" required />
+          </div>
+          <div class="auth-field">
+            <label class="auth-field__label" for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Repeat your password" required />
+          </div>
+          <button type="submit" class="button-link button-link--full">Create account</button>
+          <p id="authStatus" class="auth-status" aria-live="polite"></p>
+        </form>
+
+        <div id="successState" hidden>
+          <div class="auth-success">
+            <p class="auth-success__icon">✉️</p>
+            <h2>Check your inbox</h2>
+            <p>We sent a verification link to <strong id="successEmail"></strong>. Click it to activate your account.</p>
+            <p class="auth-hint">
+              Didn't receive it?
+              <button type="button" id="resendBtn" class="auth-link">Resend verification email</button>
+            </p>
+            <p id="resendStatus" class="auth-status" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+
+      <p class="auth-footer">Already have an account? <a class="auth-link" href="landlord-login.html">Log in</a></p>
+    </div>
+  </main>
+
+  <script src="landlord-signup.js"></script>
+</body>
+</html>

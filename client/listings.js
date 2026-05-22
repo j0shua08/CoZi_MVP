@@ -13,6 +13,11 @@ const searchForm = document.getElementById("searchForm");
 const searchInput  = document.getElementById("searchInput");
 const minPriceInput = document.getElementById("minPrice");
 const maxPriceInput = document.getElementById("maxPrice");
+const bedroomsFilter  = document.getElementById("bedroomsFilter");
+const furnishedFilter = document.getElementById("furnishedFilter");
+const petsFilter      = document.getElementById("petsFilter");
+const amenitiesToggle = document.getElementById("amenitiesToggle");
+const amenitiesPanel  = document.getElementById("amenitiesPanel");
 
 // Compare bar
 const compareBar      = document.getElementById("compareBar");
@@ -40,7 +45,18 @@ document.getElementById("clearBtn").addEventListener("click", () => {
   searchInput.value = "";
   minPriceInput.value = "";
   maxPriceInput.value = "";
+  bedroomsFilter.value = "";
+  furnishedFilter.value = "";
+  petsFilter.value = "";
+  document.querySelectorAll('input[name="amenityFilter"]:checked').forEach((cb) => { cb.checked = false; });
   loadListings();
+});
+
+amenitiesToggle.addEventListener("click", () => {
+  const isOpen = !amenitiesPanel.hidden;
+  amenitiesPanel.hidden = isOpen;
+  amenitiesToggle.setAttribute("aria-expanded", String(!isOpen));
+  amenitiesToggle.classList.toggle("filter-amenities__toggle--open", !isOpen);
 });
 
 // ── Utilities ───────────────────────────────────────────────
@@ -54,12 +70,22 @@ function escapeHTML(value) {
 
 function buildQuery() {
   const params = new URLSearchParams();
-  const search   = searchInput.value.trim();
-  const minPrice = minPriceInput.value.trim();
-  const maxPrice = maxPriceInput.value.trim();
+  const search    = searchInput.value.trim();
+  const minPrice  = minPriceInput.value.trim();
+  const maxPrice  = maxPriceInput.value.trim();
+  const bedrooms  = bedroomsFilter.value;
+  const furnished = furnishedFilter.value;
+  const pets      = petsFilter.value;
+  const amenities = [...document.querySelectorAll('input[name="amenityFilter"]:checked')].map((cb) => cb.value);
+
   if (search)    params.set("search", search);
   if (minPrice)  params.set("minPrice", minPrice);
   if (maxPrice)  params.set("maxPrice", maxPrice);
+  if (bedrooms)  params.set("bedrooms", bedrooms);
+  if (furnished) params.set("furnished", furnished);
+  if (pets)      params.set("petsAllowed", pets);
+  amenities.forEach((a) => params.append("amenities", a));
+
   const qs = params.toString();
   return qs ? `?${qs}` : "";
 }
@@ -82,11 +108,8 @@ function truncate(text, maxLength = 120) {
 }
 
 function getAmenities(rawAmenities, limit = 3) {
-  return String(rawAmenities ?? "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .slice(0, limit);
+  if (Array.isArray(rawAmenities)) return rawAmenities.filter(Boolean).slice(0, limit);
+  return String(rawAmenities ?? "").split(",").map((item) => item.trim()).filter(Boolean).slice(0, limit);
 }
 
 function amenityTags(rawAmenities, limit = 3) {
@@ -168,6 +191,9 @@ function cardHTML(listing) {
       </a>
       <div class="listing-card__body">
         <p class="listing-card__location">${location}</p>
+        ${listing.verified
+          ? `<span class="listing-verified-badge">✓ Verified Owner</span>`
+          : `<span class="listing-unverified-badge">Owner not yet verified</span>`}
 
         <div class="listing-card__header">
           <h3 class="listing-card__title">${title}</h3>
@@ -322,6 +348,26 @@ function compareModalTableHTML() {
     `;
   }
 
+  const unitSection = section("Unit details", (l) => {
+    const parts = [
+      l.bedrooms,
+      l.bathrooms ? `${escapeHTML(l.bathrooms)} bath` : null,
+      l.sizesqm ? `${escapeHTML(String(l.sizesqm))} sqm` : null,
+      l.floor ? `Floor ${escapeHTML(String(l.floor))}` : null,
+      l.furnished,
+    ].filter(Boolean);
+    return parts.length ? `<p>${parts.map(escapeHTML).join(" · ")}</p>` : '<span class="compare-empty">Not specified</span>';
+  });
+
+  const termsSection = section("Rental terms", (l) => {
+    const parts = [
+      l.leaseTerm,
+      l.advanceDeposit,
+      l.petsAllowed ? `Pets: ${l.petsAllowed}` : null,
+    ].filter(Boolean);
+    return parts.length ? `<p>${parts.map(escapeHTML).join(" · ")}</p>` : '<span class="compare-empty">Ask landlord</span>';
+  });
+
   const amenitiesSection = section("Amenities", (l) => {
     const amenities = getAmenities(l.amenities, 10);
     if (!amenities.length) return '<span class="compare-empty">None listed</span>';
@@ -342,6 +388,8 @@ function compareModalTableHTML() {
   return `
     <div class="compare-modal__table-inner" style="--compare-cols:${n}">
       <div class="compare-header-row">${headers}</div>
+      ${unitSection}
+      ${termsSection}
       ${amenitiesSection}
       ${descSection}
       ${detailsSection}

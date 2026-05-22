@@ -50,6 +50,66 @@
           </label>
         </div>
 
+        <div class="search-grid search-grid--selects">
+          <label class="field">
+            <span class="field__label">Bedrooms</span>
+            <select id="bedroomsFilter">
+              <option value="">Any</option>
+              <option value="Studio">Studio</option>
+              <option value="1BR">1BR</option>
+              <option value="2BR">2BR</option>
+              <option value="3BR+">3BR+</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Furnished</span>
+            <select id="furnishedFilter">
+              <option value="">Any</option>
+              <option value="Fully Furnished">Fully Furnished</option>
+              <option value="Semi-Furnished">Semi-Furnished</option>
+              <option value="Bare">Bare</option>
+              <option value="Unfurnished">Unfurnished</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span class="field__label">Pets</span>
+            <select id="petsFilter">
+              <option value="">Any</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="Negotiable">Negotiable</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="filter-amenities">
+          <button type="button" id="amenitiesToggle" class="filter-amenities__toggle" aria-expanded="false">
+            <span>Amenities</span>
+            <svg class="filter-amenities__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="filter-amenities__panel" id="amenitiesPanel" hidden>
+            <div class="filter-amenity-grid">
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Aircon" /> Aircon</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="WiFi" /> WiFi</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Parking" /> Parking</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Pool" /> Pool</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Gym" /> Gym</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Study Hall" /> Study Hall</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Function Hall" /> Function Hall</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="CCTV" /> CCTV</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Generator" /> Generator</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Elevator" /> Elevator</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Washer/Dryer" /> Washer/Dryer</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Water included" /> Water included</label>
+              <label class="filter-amenity-item"><input type="checkbox" name="amenityFilter" value="Electric included" /> Electricity included</label>
+            </div>
+          </div>
+        </div>
+
         <div class="search-actions">
           <button id="searchBtn" type="submit">Search Listings</button>
           <button id="clearBtn" class="button-ghost" type="button">Clear Filters</button>

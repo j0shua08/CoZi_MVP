@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoZi | My Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-page">
+
+  <header class="dashboard-nav">
+    <a class="dashboard-nav__brand" href="index.html">CoZi</a>
+    <div class="dashboard-nav__right">
+      <span class="dashboard-nav__name">
+        <span id="landlordName">—</span>
+      </span>
+      <button id="logoutBtn" class="dashboard-nav__logout">Log out</button>
+    </div>
+  </header>
+
+  <div id="verificationBanner" class="dashboard-banner" hidden>
+    Your listings appear as <strong>"Owner not yet verified."</strong>
+    Email us at <a href="mailto:cozi.philippines@gmail.com">cozi.philippines@gmail.com</a>
+    to get verified and rank higher in search results.
+  </div>
+
+  <main class="dashboard-shell">
+
+    <!-- Stats -->
+    <section aria-label="Overview">
+      <div class="dashboard-section-header">
+        <h2>Overview</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <p class="stat-card__value" id="statViews">—</p>
+          <p class="stat-card__label">Total Views</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__value" id="statInquiries">—</p>
+          <p class="stat-card__label">Total Inquiries</p>
+        </div>
+        <div class="stat-card">
+          <p class="stat-card__value" id="statActive">—</p>
+          <p class="stat-card__label">Active Listings</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Listings -->
+    <section aria-label="Your listings">
+      <div class="dashboard-section-header">
+        <h2>Your Listings</h2>
+        <a href="landlord-add-listing.html" class="button-link">+ Add Listing</a>
+      </div>
+      <div id="listingsContainer" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <script src="landlord-dashboard.js"></script>
+</body>
+</html>

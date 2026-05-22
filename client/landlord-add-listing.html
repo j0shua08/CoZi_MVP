@@ -3,20 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoZi Admin - Add Listing</title>
+  <title>CoZi | Add Listing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <main class="container">
-    <h1>CoZi Admin</h1>
+<body class="dashboard-page">
+
+  <header class="dashboard-nav">
+    <a class="dashboard-nav__brand" href="index.html">CoZi</a>
+    <div class="dashboard-nav__right">
+      <a class="dashboard-nav__back" href="landlord-dashboard.html">← Back to dashboard</a>
+    </div>
+  </header>
+
+  <main class="dashboard-shell">
+    <div class="dashboard-section-header">
+      <h2 id="pageHeading">Add Listing</h2>
+    </div>
 
     <form id="listingForm" class="card">
+
+      <!-- Photos -->
       <section class="admin-image-upload">
         <div class="admin-image-upload__copy">
           <p class="section-label">Listing Photos</p>
           <p class="admin-image-upload__hint">
-            Upload up to 5 images using these fixed labels: bedroom, bathroom, kitchen, living room, and cover photo.
+            Upload up to 5 images: bedroom, bathroom, kitchen, living room, and cover photo.
           </p>
         </div>
 
@@ -80,7 +94,7 @@
       <div class="admin-field-section">
         <label class="admin-field">
           <span class="admin-field__label">Description</span>
-          <textarea id="descriptionInput" rows="4" required placeholder="Describe the unit, its highlights, and proximity to campus..."></textarea>
+          <textarea id="descriptionInput" rows="4" required placeholder="Describe the unit, its highlights, and proximity to campus…"></textarea>
         </label>
       </div>
 
@@ -106,7 +120,7 @@
           <label class="admin-field">
             <span class="admin-field__label">Bedrooms</span>
             <select id="bedroomsInput" required>
-              <option value="">Select...</option>
+              <option value="">Select…</option>
               <option value="Studio">Studio</option>
               <option value="1BR">1BR</option>
               <option value="2BR">2BR</option>
@@ -116,7 +130,7 @@
           <label class="admin-field">
             <span class="admin-field__label">Bathrooms</span>
             <select id="bathroomsInput">
-              <option value="">Select...</option>
+              <option value="">Select…</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3+">3+</option>
@@ -128,7 +142,7 @@
           <label class="admin-field">
             <span class="admin-field__label">Furnished Status</span>
             <select id="furnishedInput" required>
-              <option value="">Select...</option>
+              <option value="">Select…</option>
               <option value="Fully Furnished">Fully Furnished</option>
               <option value="Semi-Furnished">Semi-Furnished</option>
               <option value="Bare">Bare</option>
@@ -138,7 +152,7 @@
           <label class="admin-field">
             <span class="admin-field__label">Pets Allowed</span>
             <select id="petsAllowedInput">
-              <option value="">Select...</option>
+              <option value="">Select…</option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
               <option value="Negotiable">Negotiable</option>
@@ -164,7 +178,7 @@
           <label class="admin-field">
             <span class="admin-field__label">Lease Term</span>
             <select id="leaseTermInput">
-              <option value="">Select...</option>
+              <option value="">Select…</option>
               <option value="Month-to-month">Month-to-month</option>
               <option value="6 months">6 months</option>
               <option value="1 year">1 year</option>
@@ -211,34 +225,38 @@
         <p class="admin-price-preview" id="pricePreview">Enter a price to see the formatted amount.</p>
       </div>
 
-      <!-- Contact Number -->
+      <!-- Contact -->
       <div class="admin-field-section">
-        <label class="admin-field">
-          <span class="admin-field__label">Contact Number <span class="admin-field-hint">(PH mobile, e.g. 09171234567)</span></span>
-          <input type="tel" id="contactInput" maxlength="11" placeholder="09XXXXXXXXX" required />
-        </label>
+        <p class="section-label">Contact Information</p>
+        <div class="admin-field-row">
+          <label class="admin-field">
+            <span class="admin-field__label">Phone Number <span class="admin-field-hint">(PH mobile, e.g. 09171234567)</span></span>
+            <input type="tel" id="contactInput" maxlength="11" placeholder="09XXXXXXXXX" required />
+          </label>
+          <label class="admin-field">
+            <span class="admin-field__label">Viber Number <span class="admin-field-hint">(optional)</span></span>
+            <input type="tel" id="viberInput" maxlength="11" placeholder="09XXXXXXXXX" />
+          </label>
+        </div>
         <p class="admin-field-hint" id="contactHint"></p>
+        <div class="admin-field-row">
+          <label class="admin-field">
+            <span class="admin-field__label">Facebook Profile URL <span class="admin-field-hint">(optional)</span></span>
+            <input type="url" id="messengerInput" placeholder="https://facebook.com/yourprofile" />
+          </label>
+          <label class="admin-field">
+            <span class="admin-field__label">Email Address <span class="admin-field-hint">(optional)</span></span>
+            <input type="email" id="contactEmailInput" placeholder="yourname@email.com" />
+          </label>
+        </div>
+        <p class="admin-field-hint" style="margin-top:8px;">This information will be visible to renters browsing your listing.</p>
       </div>
 
-      <button type="submit">Add Listing</button>
+      <button type="submit" id="submitBtn">Add Listing</button>
       <p id="status" class="status"></p>
     </form>
-
-    <section class="card">
-      <h2>Manage Listings</h2>
-      <div id="adminListings"></div>
-    </section>
-
-    <section class="card">
-      <h2>Landlord Verification</h2>
-      <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:var(--space-4);">
-        Toggle the checkbox to mark a landlord as CoZi-verified after confirming their documents via email.
-      </p>
-      <div id="landlordsTable"><p style="color:var(--text-muted);font-size:.875rem;">Loading…</p></div>
-    </section>
-
   </main>
 
-  <script src="admin.js"></script>
+  <script src="landlord-add-listing.js"></script>
 </body>
 </html>

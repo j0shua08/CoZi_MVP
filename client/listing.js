@@ -93,11 +93,8 @@ function setStatus(message, tone = "neutral") {
 }
 
 function getAmenities(rawAmenities, limit = 10) {
-  return String(rawAmenities ?? "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .slice(0, limit);
+  if (Array.isArray(rawAmenities)) return rawAmenities.filter(Boolean).slice(0, limit);
+  return String(rawAmenities ?? "").split(",").map((item) => item.trim()).filter(Boolean).slice(0, limit);
 }
 
 function amenityTags(rawAmenities) {
@@ -324,13 +321,17 @@ function detailHTML(listing) {
               <span class="fact-label">Rate</span>
               <span class="fact-value">P${peso(listing.price)} / month</span>
             </li>
+            ${listing.bedrooms ? `<li class="fact-row"><span class="fact-label">Bedrooms</span><span class="fact-value">${escapeHTML(listing.bedrooms)}</span></li>` : ""}
+            ${listing.bathrooms ? `<li class="fact-row"><span class="fact-label">Bathrooms</span><span class="fact-value">${escapeHTML(listing.bathrooms)}</span></li>` : ""}
+            ${listing.sizesqm ? `<li class="fact-row"><span class="fact-label">Size</span><span class="fact-value">${escapeHTML(String(listing.sizesqm))} sqm</span></li>` : ""}
+            ${listing.floor ? `<li class="fact-row"><span class="fact-label">Floor</span><span class="fact-value">${escapeHTML(String(listing.floor))}</span></li>` : ""}
+            ${listing.furnished ? `<li class="fact-row"><span class="fact-label">Furnished</span><span class="fact-value">${escapeHTML(listing.furnished)}</span></li>` : ""}
+            ${listing.leaseTerm ? `<li class="fact-row"><span class="fact-label">Lease term</span><span class="fact-value">${escapeHTML(listing.leaseTerm)}</span></li>` : ""}
+            ${listing.advanceDeposit ? `<li class="fact-row"><span class="fact-label">Advance / deposit</span><span class="fact-value">${escapeHTML(listing.advanceDeposit)}</span></li>` : ""}
+            ${listing.petsAllowed ? `<li class="fact-row"><span class="fact-label">Pets</span><span class="fact-value">${escapeHTML(listing.petsAllowed)}</span></li>` : ""}
             <li class="fact-row">
               <span class="fact-label">Contact</span>
               <span class="fact-value">${contactNumber}</span>
-            </li>
-            <li class="fact-row">
-              <span class="fact-label">Photos</span>
-              <span class="fact-value">${escapeHTML(photoCount)}</span>
             </li>
             <li class="fact-row">
               <span class="fact-label">Reference</span>
@@ -343,12 +344,18 @@ function detailHTML(listing) {
           <div>
             <p class="eyebrow">Contact landlord</p>
             <h2>Reach out when this home feels right.</h2>
+            ${listing.verified
+              ? `<span class="listing-verified-badge" style="margin-top:8px;">✓ Verified Owner</span>`
+              : `<span class="listing-unverified-badge" style="margin-top:8px;">Owner not yet verified</span>`}
           </div>
           <p class="contact-number">${contactNumber}</p>
           <p class="contact-note">
-            Use the number above to confirm availability, schedule a viewing, and ask any move-in questions.
+            Use the information below to confirm availability, schedule a viewing, and ask any move-in questions.
           </p>
           ${telHref ? `<a class="button-link button-link--full" href="${escapeHTML(telHref)}">Call Landlord</a>` : ""}
+          ${listing.viberNumber ? `<a class="button-link button-link--ghost button-link--full" href="viber://chat?number=%2B63${escapeHTML(listing.viberNumber.replace(/^0/, ""))}">Message on Viber</a>` : ""}
+          ${listing.messengerUrl ? `<a class="button-link button-link--ghost button-link--full" href="${escapeHTML(listing.messengerUrl)}" target="_blank" rel="noopener noreferrer">Message on Facebook</a>` : ""}
+          ${listing.contactEmail ? `<a class="button-link button-link--ghost button-link--full" href="mailto:${escapeHTML(listing.contactEmail)}">Send Email</a>` : ""}
         </section>
 
         <section class="card detail-aside__card">
@@ -501,6 +508,26 @@ function compareModalTableHTML(listings) {
     `;
   }
 
+  const unitSection = section("Unit details", (l) => {
+    const parts = [
+      l.bedrooms,
+      l.bathrooms ? `${escapeHTML(l.bathrooms)} bath` : null,
+      l.sizesqm ? `${escapeHTML(String(l.sizesqm))} sqm` : null,
+      l.floor ? `Floor ${escapeHTML(String(l.floor))}` : null,
+      l.furnished,
+    ].filter(Boolean);
+    return parts.length ? `<p>${parts.map(escapeHTML).join(" · ")}</p>` : '<span class="compare-empty">Not specified</span>';
+  });
+
+  const termsSection = section("Rental terms", (l) => {
+    const parts = [
+      l.leaseTerm,
+      l.advanceDeposit,
+      l.petsAllowed ? `Pets: ${l.petsAllowed}` : null,
+    ].filter(Boolean);
+    return parts.length ? `<p>${parts.map(escapeHTML).join(" · ")}</p>` : '<span class="compare-empty">Ask landlord</span>';
+  });
+
   const amenitiesSection = section("Amenities", (l) => {
     const tags = getAmenities(l.amenities, 10);
     if (!tags.length) return '<span class="compare-empty">None listed</span>';
@@ -521,6 +548,8 @@ function compareModalTableHTML(listings) {
   return `
     <div class="compare-modal__table-inner" style="--compare-cols:${n}">
       <div class="compare-header-row">${headers}</div>
+      ${unitSection}
+      ${termsSection}
       ${amenitiesSection}
       ${descSection}
       ${detailsSection}

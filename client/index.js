@@ -35,11 +35,8 @@ function truncate(text, maxLength = 120) {
 }
 
 function getAmenities(rawAmenities, limit = 3) {
-  return String(rawAmenities ?? "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .slice(0, limit);
+  if (Array.isArray(rawAmenities)) return rawAmenities.filter(Boolean).slice(0, limit);
+  return String(rawAmenities ?? "").split(",").map((item) => item.trim()).filter(Boolean).slice(0, limit);
 }
 
 function amenityTags(rawAmenities) {
@@ -141,6 +138,9 @@ function cardHTML(listing) {
       </a>
       <div class="listing-card__body">
         <p class="listing-card__location">${location}</p>
+        ${listing.verified
+          ? `<span class="listing-verified-badge">✓ Verified Owner</span>`
+          : `<span class="listing-unverified-badge">Owner not yet verified</span>`}
 
         <div class="listing-card__header">
           <h3 class="listing-card__title">${title}</h3>
