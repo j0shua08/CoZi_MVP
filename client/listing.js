@@ -372,6 +372,22 @@ function detailHTML(listing) {
             Compare with other listings
           </button>
         </section>
+
+        <section class="card detail-aside__card">
+          <div>
+            <p class="eyebrow">Share</p>
+            <h2>Know someone looking?</h2>
+          </div>
+          <p class="contact-note">Send this listing to a friend or classmate.</p>
+          <button
+            type="button"
+            class="button-link button-link--ghost button-link--full"
+            id="shareListingBtn"
+          >
+            Share this listing
+          </button>
+          <p id="shareCopiedMsg" style="display:none;font-size:.8rem;color:var(--accent);margin-top:8px;text-align:center;">Link copied to clipboard!</p>
+        </section>
       </aside>
     </article>
 
@@ -732,6 +748,21 @@ async function loadDetail() {
     lightboxReadyAt = performance.now() + 450;
     setStatus("");
     cardEl.innerHTML = detailHTML(listing);
+
+    document.getElementById("shareListingBtn")?.addEventListener("click", async () => {
+      const shareData = {
+        title: listing.title,
+        text: `Check out this listing on CoZi: ${listing.title}`,
+        url: window.location.href,
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); } catch {}
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        const msg = document.getElementById("shareCopiedMsg");
+        if (msg) { msg.style.display = "block"; setTimeout(() => { msg.style.display = "none"; }, 3000); }
+      }
+    });
   } catch (error) {
     setStatus(error.message, "error");
     cardEl.innerHTML = messageStateHTML(
