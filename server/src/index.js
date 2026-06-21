@@ -426,10 +426,21 @@ function requireAdminOrLandlord(req, res, next) {
   }
 }
 
+const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+
 app.post("/api/upload", requireAdminOrLandlord, upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    if (!ALLOWED_MIME_TYPES.includes(req.file.mimetype)) {
+      return res.status(400).json({ error: "Only JPEG, PNG, and WebP images are allowed" });
+    }
+
+    if (req.file.size > MAX_FILE_SIZE_BYTES) {
+      return res.status(400).json({ error: "Image must be under 10MB" });
     }
 
     const ext = req.file.originalname.split(".").pop();
