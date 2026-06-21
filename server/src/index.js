@@ -11,6 +11,7 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const { Resend } = require("resend");
+const rateLimit = require("express-rate-limit");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -38,6 +39,14 @@ const supabase = createClient(
 
 app.use(cors());
 app.use(express.json());
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many attempts, please try again later." },
+});
 
 function normalizeImageLabel(value) {
   return String(value ?? "").trim().toLowerCase();
@@ -383,7 +392,7 @@ app.delete("/api/listings/:id", requireAdmin, async (req, res) => {
   }
 });
 
-app.post("/api/admin/login", (req, res) => {
+app.post("/api/admin/login", authLimiter, (req, res) => {
   const { password } = req.body;
 
   if (!process.env.ADMIN_PASSWORD) {
@@ -726,7 +735,7 @@ function requireLandlord(req, res, next) {
   }
 }
 
-app.post("/api/landlord/signup", async (req, res) => {
+app.post("/api/landlord/signup", authLimiter, async (req, res) => {
   try {
     const { fullName, email, password, confirmPassword } = req.body;
 
@@ -800,7 +809,7 @@ app.get("/api/landlord/verify-email", async (req, res) => {
   }
 });
 
-app.post("/api/landlord/login", async (req, res) => {
+app.post("/api/landlord/login", authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -831,7 +840,7 @@ app.post("/api/landlord/login", async (req, res) => {
   }
 });
 
-app.post("/api/landlord/resend-verification", async (req, res) => {
+app.post("/api/landlord/resend-verification", authLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "Email is required" });
@@ -857,7 +866,7 @@ app.post("/api/landlord/resend-verification", async (req, res) => {
   }
 });
 
-app.post("/api/landlord/forgot-password", async (req, res) => {
+app.post("/api/landlord/forgot-password", authLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "Email is required" });
