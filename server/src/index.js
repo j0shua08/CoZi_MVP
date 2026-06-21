@@ -246,7 +246,7 @@ app.get("/api/listings/:id", async (req, res) => {
       return res.status(404).json({ error: "Listing not found" });
     }
 
-    if (listing.landlordId && !req.headers.authorization) {
+    if (!req.headers.authorization) {
       prisma.listing.update({
         where: { id: listing.id },
         data: { viewCount: { increment: 1 } },
