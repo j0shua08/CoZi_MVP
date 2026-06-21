@@ -37,7 +37,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-app.use(cors());
+app.use(cors({ origin: process.env.APP_URL || "http://localhost:3001" }));
 app.use(express.json());
 
 const authLimiter = rateLimit({
