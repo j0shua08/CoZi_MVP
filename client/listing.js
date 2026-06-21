@@ -716,6 +716,14 @@ async function loadDetail() {
     const listing = await res.json();
     currentListing = listing; // store for compare feature
 
+    const ogImage = getPrimaryImageUrl(listing);
+    const ogDescription = (listing.description || "").slice(0, 160) || "Browse trusted near-campus condos for students on CoZi.";
+    document.title = `${listing.title} | CoZi`;
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", `${listing.title} | CoZi`);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", ogDescription);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", window.location.href);
+    if (ogImage) document.querySelector('meta[property="og:image"]')?.setAttribute("content", ogImage);
+
     detailImages = buildDetailImages(listing).images.map((image) => ({
       url:     image.url,
       alt:     `${listing.title || "Listing"} ${titleCaseLabel(image.label)}`,
