@@ -200,6 +200,7 @@ app.get("/api/listings", async (req, res) => {
     const listings = await prisma.listing.findMany({
       where: {
         AND: [
+          { status: "available" },
           search
             ? {
                 OR: [
