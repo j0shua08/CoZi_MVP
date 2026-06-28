@@ -749,6 +749,12 @@ async function loadDetail() {
     setStatus("");
     cardEl.innerHTML = detailHTML(listing);
 
+    cardEl.querySelectorAll(".contact-card a[href]").forEach((link) => {
+      link.addEventListener("click", () => {
+        fetch(`${API_BASE}/api/listings/${encodeURIComponent(id)}/inquiry`, { method: "POST" }).catch(() => {});
+      }, { once: true });
+    });
+
     document.getElementById("shareListingBtn")?.addEventListener("click", async () => {
       const shareData = {
         title: listing.title,

@@ -14,6 +14,8 @@ const statViews           = document.getElementById("statViews");
 const statInquiries       = document.getElementById("statInquiries");
 const statActive          = document.getElementById("statActive");
 
+let perListingStats = {};
+
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("cozi_landlord_token");
   localStorage.removeItem("cozi_landlord_name");
@@ -72,6 +74,9 @@ async function loadStats() {
     statViews.textContent      = data.totalViews ?? 0;
     statInquiries.textContent  = data.totalInquiries ?? 0;
     statActive.textContent     = data.activeListings ?? 0;
+    if (Array.isArray(data.perListing)) {
+      perListingStats = Object.fromEntries(data.perListing.map((l) => [l.id, l]));
+    }
   } catch {
     statViews.textContent = statInquiries.textContent = statActive.textContent = "—";
   }
@@ -119,6 +124,10 @@ function cardHTML(listing) {
   const status    = listing.status || "available";
   const label     = escapeHTML(statusLabel(status));
   const isHidden  = status === "hidden";
+  const stats     = perListingStats[listing.id] || {};
+  const views     = stats.views ?? 0;
+  const inquiries = stats.inquiries ?? 0;
+  const rate      = stats.conversionRate ?? "0.0";
 
   const actionsHTML = isHidden
     ? `<button class="btn-ghost-sm btn-ghost-sm--restore" data-action="restore" data-id="${id}">Restore listing</button>`
@@ -135,6 +144,13 @@ function cardHTML(listing) {
           <p class="landlord-card__title">${title}</p>
           <p class="landlord-card__sub">${location}${location && price ? " · " : ""}${price ? `₱${peso(Number(listing.price))}/mo` : ""}</p>
           <span class="landlord-card__status landlord-card__status--${escapeHTML(status)}">${label}</span>
+          <div class="landlord-card__stats">
+            <span class="landlord-card__stat">${views} views</span>
+            <span class="landlord-card__stat-sep">·</span>
+            <span class="landlord-card__stat">${inquiries} inquiries</span>
+            <span class="landlord-card__stat-sep">·</span>
+            <span class="landlord-card__stat">${rate}% conversion</span>
+          </div>
         </div>
       </a>
       <div class="landlord-card__actions">
@@ -201,6 +217,7 @@ async function confirmDelete(id) {
 
 // ── Init ──────────────────────────────────────────────────────
 
-Promise.all([loadProfile(), loadStats(), loadListings()]).then(([isVerified, , listings]) => {
+Promise.all([loadProfile(), loadStats()]).then(async ([isVerified]) => {
+  const listings = await loadListings();
   if (!isVerified && listings.length > 0) verificationBanner.hidden = false;
 });

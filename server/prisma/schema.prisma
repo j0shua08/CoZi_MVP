@@ -55,5 +55,19 @@ model Listing {
   verified       Boolean   @default(false)
   status         String    @default("available")
   viewCount      Int       @default(0)
+  inquiryCount   Int       @default(0)
   createdAt      DateTime  @default(now())
+}
+
+model SearchLog {
+  id          Int      @id @default(autoincrement())
+  query       String?
+  minPrice    Int?
+  maxPrice    Int?
+  bedrooms    String?
+  furnished   String?
+  petsAllowed String?
+  amenities   String?
+  resultCount Int
+  createdAt   DateTime @default(now())
 }

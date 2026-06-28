@@ -3,238 +3,327 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoZi Admin - Add Listing</title>
+  <title>CoZi Admin</title>
   <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <main class="container">
-    <h1>CoZi Admin</h1>
+<body class="dashboard-page">
 
-    <form id="listingForm" class="card">
-      <section class="admin-image-upload">
-        <div class="admin-image-upload__copy">
-          <p class="section-label">Listing Photos</p>
-          <p class="admin-image-upload__hint">
-            Upload up to 5 images using these fixed labels: bedroom, bathroom, kitchen, living room, and cover photo.
-          </p>
-        </div>
+  <header class="dashboard-nav">
+    <a class="dashboard-nav__brand" href="index.html">CoZi</a>
+    <div class="dashboard-nav__right">
+      <span class="dashboard-nav__name">Admin</span>
+      <button id="logoutBtn" class="dashboard-nav__logout">Log out</button>
+    </div>
+  </header>
 
-        <div class="admin-image-grid">
-          <div class="admin-image-slot">
-            <label class="admin-image-slot__field">
-              <span class="admin-image-slot__label">Bedroom</span>
-              <input type="file" accept="image/*" data-image-label="bedroom" />
-              <div class="admin-image-slot__preview" data-image-preview="bedroom">No bedroom photo uploaded.</div>
-            </label>
-            <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="bedroom">Remove Photo</button>
-          </div>
+  <main class="admin-shell">
 
-          <div class="admin-image-slot">
-            <label class="admin-image-slot__field">
-              <span class="admin-image-slot__label">Bathroom</span>
-              <input type="file" accept="image/*" data-image-label="bathroom" />
-              <div class="admin-image-slot__preview" data-image-preview="bathroom">No bathroom photo uploaded.</div>
-            </label>
-            <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="bathroom">Remove Photo</button>
-          </div>
+    <nav class="admin-tabs" role="tablist">
+      <button class="admin-tab admin-tab--active" role="tab" data-tab="overview">Overview</button>
+      <button class="admin-tab" role="tab" data-tab="listings">Listings</button>
+      <button class="admin-tab" role="tab" data-tab="landlords">Landlords</button>
+      <button class="admin-tab" role="tab" data-tab="search-trends">Search Trends</button>
+    </nav>
 
-          <div class="admin-image-slot">
-            <label class="admin-image-slot__field">
-              <span class="admin-image-slot__label">Kitchen</span>
-              <input type="file" accept="image/*" data-image-label="kitchen" />
-              <div class="admin-image-slot__preview" data-image-preview="kitchen">No kitchen photo uploaded.</div>
-            </label>
-            <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="kitchen">Remove Photo</button>
-          </div>
+    <!-- ── Overview ─────────────────────────────────────────────── -->
+    <section class="admin-panel" id="panel-overview">
 
-          <div class="admin-image-slot">
-            <label class="admin-image-slot__field">
-              <span class="admin-image-slot__label">Living Room</span>
-              <input type="file" accept="image/*" data-image-label="living room" />
-              <div class="admin-image-slot__preview" data-image-preview="living room">No living room photo uploaded.</div>
-            </label>
-            <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="living room">Remove Photo</button>
-          </div>
-
-          <div class="admin-image-slot">
-            <label class="admin-image-slot__field">
-              <span class="admin-image-slot__label">Cover Photo</span>
-              <input type="file" accept="image/*" data-image-label="cover photo" />
-              <div class="admin-image-slot__preview" data-image-preview="cover photo">No cover photo uploaded.</div>
-            </label>
-            <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="cover photo">Remove Photo</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Title -->
-      <div class="admin-field-section">
-        <label class="admin-field">
-          <span class="admin-field__label">Title <span class="admin-field-counter" id="titleCounter">0/80</span></span>
-          <input type="text" id="titleInput" maxlength="80" required placeholder="e.g., Fully Furnished Studio near ADMU" />
-        </label>
+      <div class="dashboard-section-header">
+        <h2>Platform Overview</h2>
       </div>
 
-      <!-- Description -->
-      <div class="admin-field-section">
-        <label class="admin-field">
-          <span class="admin-field__label">Description</span>
-          <textarea id="descriptionInput" rows="4" required placeholder="Describe the unit, its highlights, and proximity to campus..."></textarea>
-        </label>
+      <div class="stats-grid" id="overviewStats">
+        <div class="stat-card"><p class="stat-card__value" id="oStatAvailable">—</p><p class="stat-card__label">Available</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="oStatRented">—</p><p class="stat-card__label">Rented</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="oStatHidden">—</p><p class="stat-card__label">Hidden</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="oStatLandlords">—</p><p class="stat-card__label">Landlords</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="oStatViews">—</p><p class="stat-card__label">Total Views</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="oStatInquiries">—</p><p class="stat-card__label">Total Inquiries</p></div>
       </div>
 
-      <!-- Location -->
-      <div class="admin-field-section">
-        <p class="section-label">Location</p>
-        <div class="admin-field-row">
-          <label class="admin-field">
-            <span class="admin-field__label">Building / Property Name</span>
-            <input type="text" id="buildingName" required placeholder="e.g., Katipunan Residences" />
-          </label>
-          <label class="admin-field">
-            <span class="admin-field__label">Area / Barangay</span>
-            <input type="text" id="areaInput" required placeholder="e.g., Loyola Heights, Quezon City" />
-          </label>
+      <div class="admin-overview-row">
+        <div class="admin-chart-card">
+          <p class="admin-chart-title">Listings by Status</p>
+          <canvas id="statusDonut" width="220" height="220"></canvas>
+        </div>
+
+        <div class="admin-attention-card">
+          <p class="admin-chart-title">Needs Attention</p>
+          <ul class="admin-attention-list" id="attentionList">
+            <li class="admin-attention-item">Loading…</li>
+          </ul>
         </div>
       </div>
 
-      <!-- Unit Details -->
-      <div class="admin-field-section">
-        <p class="section-label">Unit Details</p>
-        <div class="admin-field-row">
-          <label class="admin-field">
-            <span class="admin-field__label">Bedrooms</span>
-            <select id="bedroomsInput" required>
-              <option value="">Select...</option>
-              <option value="Studio">Studio</option>
-              <option value="1BR">1BR</option>
-              <option value="2BR">2BR</option>
-              <option value="3BR+">3BR+</option>
-            </select>
-          </label>
-          <label class="admin-field">
-            <span class="admin-field__label">Bathrooms</span>
-            <select id="bathroomsInput">
-              <option value="">Select...</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3+">3+</option>
-              <option value="Shared">Shared</option>
-            </select>
-          </label>
-        </div>
-        <div class="admin-field-row">
-          <label class="admin-field">
-            <span class="admin-field__label">Furnished Status</span>
-            <select id="furnishedInput" required>
-              <option value="">Select...</option>
-              <option value="Fully Furnished">Fully Furnished</option>
-              <option value="Semi-Furnished">Semi-Furnished</option>
-              <option value="Bare">Bare</option>
-              <option value="Unfurnished">Unfurnished</option>
-            </select>
-          </label>
-          <label class="admin-field">
-            <span class="admin-field__label">Pets Allowed</span>
-            <select id="petsAllowedInput">
-              <option value="">Select...</option>
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-              <option value="Negotiable">Negotiable</option>
-            </select>
-          </label>
-        </div>
-        <div class="admin-field-row">
-          <label class="admin-field">
-            <span class="admin-field__label">Size (sqm)</span>
-            <input type="number" step="0.01" id="sizeInput" min="1" placeholder="e.g., 28.5" />
-          </label>
-          <label class="admin-field">
-            <span class="admin-field__label">Floor Number</span>
-            <input type="number" id="floorInput" min="1" placeholder="e.g., 5" />
-          </label>
-        </div>
-      </div>
-
-      <!-- Rental Terms -->
-      <div class="admin-field-section">
-        <p class="section-label">Rental Terms</p>
-        <div class="admin-field-row">
-          <label class="admin-field">
-            <span class="admin-field__label">Lease Term</span>
-            <select id="leaseTermInput">
-              <option value="">Select...</option>
-              <option value="Month-to-month">Month-to-month</option>
-              <option value="6 months">6 months</option>
-              <option value="1 year">1 year</option>
-              <option value="2 years">2 years</option>
-            </select>
-          </label>
-          <label class="admin-field">
-            <span class="admin-field__label">Advance / Deposit <span class="admin-field-hint">(e.g., 2 months advance + 1 month deposit)</span></span>
-            <input type="text" id="advanceDepositInput" placeholder="e.g., 2 months advance, 1 month deposit" />
-          </label>
-        </div>
-      </div>
-
-      <!-- Amenities -->
-      <div class="admin-field-section">
-        <p class="section-label">Amenities</p>
-        <div class="admin-amenity-grid">
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Aircon" /> Aircon</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="WiFi" /> WiFi</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Parking" /> Parking</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Pool" /> Pool</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Gym" /> Gym</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Study Hall" /> Study Hall</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Function Hall" /> Function Hall</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="CCTV" /> CCTV</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Generator" /> Generator</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Elevator" /> Elevator</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Washer/Dryer" /> Washer/Dryer</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Water included" /> Water included</label>
-          <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Electric included" /> Electricity included</label>
-        </div>
-        <label class="admin-field" style="margin-top:12px;">
-          <span class="admin-field__label">Custom amenities <span class="admin-field-hint">(comma-separated)</span></span>
-          <input type="text" id="customAmenities" placeholder="e.g., Balcony, Study nook, Netflix included" />
-        </label>
-      </div>
-
-      <!-- Price -->
-      <div class="admin-field-section">
-        <label class="admin-field">
-          <span class="admin-field__label">Price (PHP/month)</span>
-          <input type="number" id="priceInput" min="0" required placeholder="e.g., 15000" />
-        </label>
-        <p class="admin-price-preview" id="pricePreview">Enter a price to see the formatted amount.</p>
-      </div>
-
-      <!-- Contact Number -->
-      <div class="admin-field-section">
-        <label class="admin-field">
-          <span class="admin-field__label">Contact Number <span class="admin-field-hint">(PH mobile, e.g. 09171234567)</span></span>
-          <input type="tel" id="contactInput" maxlength="11" placeholder="09XXXXXXXXX" required />
-        </label>
-        <p class="admin-field-hint" id="contactHint"></p>
-      </div>
-
-      <button type="submit">Add Listing</button>
-      <p id="status" class="status"></p>
-    </form>
-
-    <section class="card">
-      <h2>Manage Listings</h2>
-      <div id="adminListings"></div>
     </section>
 
-    <section class="card">
-      <h2>Landlord Verification</h2>
-      <p style="color:var(--text-muted);font-size:.875rem;margin-bottom:var(--space-4);">
-        Toggle the checkbox to mark a landlord as CoZi-verified after confirming their documents via email.
-      </p>
+    <!-- ── Listings ──────────────────────────────────────────────── -->
+    <section class="admin-panel admin-panel--hidden" id="panel-listings">
+
+      <div class="dashboard-section-header">
+        <h2 id="formHeading">Add Listing</h2>
+      </div>
+
+      <form id="listingForm" class="card">
+        <section class="admin-image-upload">
+          <div class="admin-image-upload__copy">
+            <p class="section-label">Listing Photos</p>
+            <p class="admin-image-upload__hint">
+              Upload up to 5 images using these fixed labels: bedroom, bathroom, kitchen, living room, and cover photo.
+            </p>
+          </div>
+
+          <div class="admin-image-grid">
+            <div class="admin-image-slot">
+              <label class="admin-image-slot__field">
+                <span class="admin-image-slot__label">Bedroom</span>
+                <input type="file" accept="image/*" data-image-label="bedroom" />
+                <div class="admin-image-slot__preview" data-image-preview="bedroom">No bedroom photo uploaded.</div>
+              </label>
+              <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="bedroom">Remove Photo</button>
+            </div>
+
+            <div class="admin-image-slot">
+              <label class="admin-image-slot__field">
+                <span class="admin-image-slot__label">Bathroom</span>
+                <input type="file" accept="image/*" data-image-label="bathroom" />
+                <div class="admin-image-slot__preview" data-image-preview="bathroom">No bathroom photo uploaded.</div>
+              </label>
+              <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="bathroom">Remove Photo</button>
+            </div>
+
+            <div class="admin-image-slot">
+              <label class="admin-image-slot__field">
+                <span class="admin-image-slot__label">Kitchen</span>
+                <input type="file" accept="image/*" data-image-label="kitchen" />
+                <div class="admin-image-slot__preview" data-image-preview="kitchen">No kitchen photo uploaded.</div>
+              </label>
+              <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="kitchen">Remove Photo</button>
+            </div>
+
+            <div class="admin-image-slot">
+              <label class="admin-image-slot__field">
+                <span class="admin-image-slot__label">Living Room</span>
+                <input type="file" accept="image/*" data-image-label="living room" />
+                <div class="admin-image-slot__preview" data-image-preview="living room">No living room photo uploaded.</div>
+              </label>
+              <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="living room">Remove Photo</button>
+            </div>
+
+            <div class="admin-image-slot">
+              <label class="admin-image-slot__field">
+                <span class="admin-image-slot__label">Cover Photo</span>
+                <input type="file" accept="image/*" data-image-label="cover photo" />
+                <div class="admin-image-slot__preview" data-image-preview="cover photo">No cover photo uploaded.</div>
+              </label>
+              <button type="button" class="button-ghost admin-image-slot__remove" data-image-remove="cover photo">Remove Photo</button>
+            </div>
+          </div>
+        </section>
+
+        <div class="admin-field-section">
+          <label class="admin-field">
+            <span class="admin-field__label">Title <span class="admin-field-counter" id="titleCounter">0/80</span></span>
+            <input type="text" id="titleInput" maxlength="80" required placeholder="e.g., Fully Furnished Studio near ADMU" />
+          </label>
+        </div>
+
+        <div class="admin-field-section">
+          <label class="admin-field">
+            <span class="admin-field__label">Description</span>
+            <textarea id="descriptionInput" rows="4" required placeholder="Describe the unit, its highlights, and proximity to campus..."></textarea>
+          </label>
+        </div>
+
+        <div class="admin-field-section">
+          <p class="section-label">Location</p>
+          <div class="admin-field-row">
+            <label class="admin-field">
+              <span class="admin-field__label">Building / Property Name</span>
+              <input type="text" id="buildingName" required placeholder="e.g., Katipunan Residences" />
+            </label>
+            <label class="admin-field">
+              <span class="admin-field__label">Area / Barangay</span>
+              <input type="text" id="areaInput" required placeholder="e.g., Loyola Heights, Quezon City" />
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-field-section">
+          <p class="section-label">Unit Details</p>
+          <div class="admin-field-row">
+            <label class="admin-field">
+              <span class="admin-field__label">Bedrooms</span>
+              <select id="bedroomsInput" required>
+                <option value="">Select...</option>
+                <option value="Studio">Studio</option>
+                <option value="1BR">1BR</option>
+                <option value="2BR">2BR</option>
+                <option value="3BR+">3BR+</option>
+              </select>
+            </label>
+            <label class="admin-field">
+              <span class="admin-field__label">Bathrooms</span>
+              <select id="bathroomsInput">
+                <option value="">Select...</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3+">3+</option>
+                <option value="Shared">Shared</option>
+              </select>
+            </label>
+          </div>
+          <div class="admin-field-row">
+            <label class="admin-field">
+              <span class="admin-field__label">Furnished Status</span>
+              <select id="furnishedInput" required>
+                <option value="">Select...</option>
+                <option value="Fully Furnished">Fully Furnished</option>
+                <option value="Semi-Furnished">Semi-Furnished</option>
+                <option value="Bare">Bare</option>
+                <option value="Unfurnished">Unfurnished</option>
+              </select>
+            </label>
+            <label class="admin-field">
+              <span class="admin-field__label">Pets Allowed</span>
+              <select id="petsAllowedInput">
+                <option value="">Select...</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Negotiable">Negotiable</option>
+              </select>
+            </label>
+          </div>
+          <div class="admin-field-row">
+            <label class="admin-field">
+              <span class="admin-field__label">Size (sqm)</span>
+              <input type="number" step="0.01" id="sizeInput" min="1" placeholder="e.g., 28.5" />
+            </label>
+            <label class="admin-field">
+              <span class="admin-field__label">Floor Number</span>
+              <input type="number" id="floorInput" min="1" placeholder="e.g., 5" />
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-field-section">
+          <p class="section-label">Rental Terms</p>
+          <div class="admin-field-row">
+            <label class="admin-field">
+              <span class="admin-field__label">Lease Term</span>
+              <select id="leaseTermInput">
+                <option value="">Select...</option>
+                <option value="Month-to-month">Month-to-month</option>
+                <option value="6 months">6 months</option>
+                <option value="1 year">1 year</option>
+                <option value="2 years">2 years</option>
+              </select>
+            </label>
+            <label class="admin-field">
+              <span class="admin-field__label">Advance / Deposit <span class="admin-field-hint">(e.g., 2 months advance + 1 month deposit)</span></span>
+              <input type="text" id="advanceDepositInput" placeholder="e.g., 2 months advance, 1 month deposit" />
+            </label>
+          </div>
+        </div>
+
+        <div class="admin-field-section">
+          <p class="section-label">Amenities</p>
+          <div class="admin-amenity-grid">
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Aircon" /> Aircon</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="WiFi" /> WiFi</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Parking" /> Parking</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Pool" /> Pool</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Gym" /> Gym</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Study Hall" /> Study Hall</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Function Hall" /> Function Hall</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="CCTV" /> CCTV</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Generator" /> Generator</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Elevator" /> Elevator</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Washer/Dryer" /> Washer/Dryer</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Water included" /> Water included</label>
+            <label class="admin-amenity-item"><input type="checkbox" name="amenity" value="Electric included" /> Electricity included</label>
+          </div>
+          <label class="admin-field" style="margin-top:12px;">
+            <span class="admin-field__label">Custom amenities <span class="admin-field-hint">(comma-separated)</span></span>
+            <input type="text" id="customAmenities" placeholder="e.g., Balcony, Study nook, Netflix included" />
+          </label>
+        </div>
+
+        <div class="admin-field-section">
+          <label class="admin-field">
+            <span class="admin-field__label">Price (PHP/month)</span>
+            <input type="number" id="priceInput" min="0" required placeholder="e.g., 15000" />
+          </label>
+          <p class="admin-price-preview" id="pricePreview">Enter a price to see the formatted amount.</p>
+        </div>
+
+        <div class="admin-field-section">
+          <label class="admin-field">
+            <span class="admin-field__label">Contact Number <span class="admin-field-hint">(PH mobile, e.g. 09171234567)</span></span>
+            <input type="tel" id="contactInput" maxlength="11" placeholder="09XXXXXXXXX" required />
+          </label>
+          <p class="admin-field-hint" id="contactHint"></p>
+        </div>
+
+        <div class="admin-form-actions">
+          <button type="submit" id="submitBtn">Add Listing</button>
+          <button type="button" id="cancelEditBtn" class="button-ghost" hidden>Cancel Edit</button>
+        </div>
+        <p id="status" class="status"></p>
+      </form>
+
+      <div class="dashboard-section-header" style="margin-top: var(--space-6);">
+        <h2>All Listings</h2>
+      </div>
+      <div id="adminListings"></div>
+
+    </section>
+
+    <!-- ── Landlords ─────────────────────────────────────────────── -->
+    <section class="admin-panel admin-panel--hidden" id="panel-landlords">
+      <div class="dashboard-section-header">
+        <h2>Landlords</h2>
+      </div>
       <div id="landlordsTable"><p style="color:var(--text-muted);font-size:.875rem;">Loading…</p></div>
+    </section>
+
+    <!-- ── Search Trends ─────────────────────────────────────────── -->
+    <section class="admin-panel admin-panel--hidden" id="panel-search-trends">
+      <div class="dashboard-section-header">
+        <h2>Search Trends <span class="admin-trends-period">(last 30 days)</span></h2>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><p class="stat-card__value" id="tStatTotal">—</p><p class="stat-card__label">Total Searches</p></div>
+        <div class="stat-card"><p class="stat-card__value" id="tStatZero">—</p><p class="stat-card__label">No-Result Searches</p></div>
+      </div>
+
+      <div class="admin-trends-grid">
+
+        <div class="admin-chart-card admin-chart-card--tall">
+          <p class="admin-chart-title">Top Search Terms</p>
+          <div id="noQueriesMsg" hidden><p style="color:var(--text-muted);font-size:.875rem;">No searches logged yet.</p></div>
+          <canvas id="topQueriesBar"></canvas>
+        </div>
+
+        <div class="admin-chart-card admin-chart-card--tall">
+          <p class="admin-chart-title">Searches with No Results</p>
+          <div id="zeroResultsList" class="admin-zero-results"></div>
+        </div>
+
+        <div class="admin-chart-card">
+          <p class="admin-chart-title">Price Range Searched</p>
+          <canvas id="priceRangeBar"></canvas>
+        </div>
+
+        <div class="admin-chart-card">
+          <p class="admin-chart-title">Top Amenity Filters</p>
+          <canvas id="amenityBar"></canvas>
+        </div>
+
+      </div>
     </section>
 
   </main>

@@ -37,7 +37,14 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-app.use(cors({ origin: process.env.APP_URL || "http://localhost:3001" }));
+const allowedOrigins = [
+  process.env.APP_URL,
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+].filter(Boolean);
+app.use(cors({ origin: allowedOrigins }));
 app.use(express.json());
 
 const authLimiter = rateLimit({
@@ -229,11 +236,34 @@ app.get("/api/listings", async (req, res) => {
       orderBy: [{ verified: "desc" }, { createdAt: "desc" }],
     });
 
+    const hasFilters = search || minPrice || maxPrice || bedrooms || furnished || petsAllowed || amenityFilter.length;
+    if (hasFilters) {
+      prisma.searchLog.create({
+        data: {
+          query: search || null,
+          minPrice: minPrice ? Number(minPrice) : null,
+          maxPrice: maxPrice ? Number(maxPrice) : null,
+          bedrooms: bedrooms || null,
+          furnished: furnished || null,
+          petsAllowed: petsAllowed || null,
+          amenities: amenityFilter.length ? amenityFilter.join(",") : null,
+          resultCount: listings.length,
+        },
+      }).catch(() => {});
+    }
+
     res.json(listings.map(serializeListing));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });
   }
+});
+
+app.post("/api/listings/:id/inquiry", async (req, res) => {
+  const id = Number(req.params.id);
+  if (!id) return res.status(400).json({ error: "Invalid id" });
+  prisma.listing.update({ where: { id }, data: { inquiryCount: { increment: 1 } } }).catch(() => {});
+  res.json({ ok: true });
 });
 
 app.get("/api/listings/:id", async (req, res) => {
@@ -500,12 +530,22 @@ app.get("/api/landlord/stats", requireLandlord, async (req, res) => {
   try {
     const listings = await prisma.listing.findMany({
       where: { landlordId: req.landlordId },
-      select: { status: true, viewCount: true },
+      select: { id: true, title: true, status: true, viewCount: true, inquiryCount: true },
     });
+    const totalViews = listings.reduce((sum, l) => sum + l.viewCount, 0);
+    const totalInquiries = listings.reduce((sum, l) => sum + l.inquiryCount, 0);
     res.json({
       activeListings: listings.filter((l) => l.status === "available").length,
-      totalViews: listings.reduce((sum, l) => sum + l.viewCount, 0),
-      totalInquiries: 0,
+      totalViews,
+      totalInquiries,
+      perListing: listings.map((l) => ({
+        id: l.id,
+        title: l.title,
+        status: l.status,
+        views: l.viewCount,
+        inquiries: l.inquiryCount,
+        conversionRate: l.viewCount > 0 ? ((l.inquiryCount / l.viewCount) * 100).toFixed(1) : "0.0",
+      })),
     });
   } catch (error) {
     console.error(error);
@@ -680,6 +720,101 @@ app.patch("/api/admin/landlords/:id/verify", requireAdmin, async (req, res) => {
       data: { isVerified: Boolean(isVerified) },
     });
     res.json({ id: updated.id, isVerified: updated.isVerified });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// ── Admin analytics ───────────────────────────────────────────
+
+app.get("/api/admin/stats", requireAdmin, async (req, res) => {
+  try {
+    const [listings, landlords] = await Promise.all([
+      prisma.listing.findMany({ select: { status: true, viewCount: true, inquiryCount: true, landlordId: true } }),
+      prisma.landlord.findMany({ select: { isVerified: true, emailVerified: true, _count: { select: { listings: true } } } }),
+    ]);
+
+    const byStatus = { available: 0, rented: 0, hidden: 0 };
+    let totalViews = 0, totalInquiries = 0, zeroViewCount = 0;
+    listings.forEach((l) => {
+      byStatus[l.status] = (byStatus[l.status] || 0) + 1;
+      totalViews += l.viewCount;
+      totalInquiries += l.inquiryCount;
+      if (l.viewCount === 0) zeroViewCount++;
+    });
+
+    res.json({
+      listings: {
+        total: listings.length,
+        available: byStatus.available,
+        rented: byStatus.rented,
+        hidden: byStatus.hidden,
+        zeroViews: zeroViewCount,
+      },
+      landlords: {
+        total: landlords.length,
+        verified: landlords.filter((l) => l.isVerified).length,
+        emailVerified: landlords.filter((l) => l.emailVerified).length,
+        noListings: landlords.filter((l) => l._count.listings === 0).length,
+      },
+      platform: { totalViews, totalInquiries },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+app.get("/api/admin/search-trends", requireAdmin, async (req, res) => {
+  try {
+    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const logs = await prisma.searchLog.findMany({
+      where: { createdAt: { gte: since } },
+      select: { query: true, minPrice: true, maxPrice: true, amenities: true, resultCount: true },
+    });
+
+    const queryCounts = {};
+    const zeroCounts = {};
+    const amenityCounts = {};
+    const priceBuckets = { "Under ₱10k": 0, "₱10k–₱15k": 0, "₱15k–₱25k": 0, "Over ₱25k": 0 };
+
+    logs.forEach((log) => {
+      if (log.query) {
+        const q = log.query.toLowerCase().trim();
+        queryCounts[q] = (queryCounts[q] || 0) + 1;
+        if (log.resultCount === 0) zeroCounts[q] = (zeroCounts[q] || 0) + 1;
+      }
+      if (log.maxPrice != null) {
+        if (log.maxPrice <= 10000) priceBuckets["Under ₱10k"]++;
+        else if (log.maxPrice <= 15000) priceBuckets["₱10k–₱15k"]++;
+        else if (log.maxPrice <= 25000) priceBuckets["₱15k–₱25k"]++;
+        else priceBuckets["Over ₱25k"]++;
+      }
+      if (log.amenities) {
+        log.amenities.split(",").forEach((a) => {
+          const key = a.trim();
+          if (key) amenityCounts[key] = (amenityCounts[key] || 0) + 1;
+        });
+      }
+    });
+
+    const topQueries = Object.entries(queryCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([term, count]) => ({ term, count }));
+
+    const zeroResultQueries = Object.entries(zeroCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([term, count]) => ({ term, count }));
+
+    const topAmenities = Object.entries(amenityCounts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([amenity, count]) => ({ amenity, count }));
+
+    res.json({ topQueries, zeroResultQueries, priceBuckets, topAmenities, totalSearches: logs.length });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Something went wrong" });
